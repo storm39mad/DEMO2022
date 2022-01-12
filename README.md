@@ -110,7 +110,7 @@ Rename-Computer -NewName CLI-XX
 ## RTR-L
 ```cisco
 int gi 1
-ip address 4.4.4.1 255.255.255.0
+ip address 4.4.4.100 255.255.255.0
 no sh
 
 int gi 2
@@ -126,7 +126,7 @@ wr
 
 ```cisco
 int gi 1
-ip address 5.5.5.1 255.255.255.0
+ip address 5.5.5.100 255.255.255.0
 no sh
 int gi 2
 ip address 172.16.100.254 255.255.255.0
