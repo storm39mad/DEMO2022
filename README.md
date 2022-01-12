@@ -227,3 +227,31 @@ ip address 172.16.1.2 255.255.255.0
 tunnel mode gre ip
 tunnel source 5.5.5.100
 tunnel destination 4.4.4.100
+
+
+NAT
+на внутр. интерфейсе - ip nat inside
+на внешн. интерфейсе - ip nat outside
+
+RTR-L-XX
+
+
+int gi 1
+ip nat outside
+
+int gi 2
+ip nat inside
+
+access-list 1 permit 192.168.100.0 0.0.0.255
+ip nat inside source list 1 interface Gi1 overload
+
+RTR-R-XX
+
+int gi 1
+ip nat outside
+
+int gi 2
+ip nat inside
+
+access-list 1 permit 172.16.100.0 0.0.0.255
+ip nat inside source list 1 interface Gi1 overload
