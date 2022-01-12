@@ -103,6 +103,9 @@ hostnamectl set-hostname ISP-XX
 Rename-Computer -NewName CLI-XX
 ```
 
+![image](https://user-images.githubusercontent.com/79700810/149140416-38cb1f3d-5be7-461d-a833-c1301d4e06a8.png)
+
+
 ## Адресация должна быть выполнена в соответствии с Таблицей 1;
 ## RTR-L
 ```cisco
@@ -164,3 +167,26 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 
 ![image](https://user-images.githubusercontent.com/79700810/149138018-65de91c7-6431-45fe-884b-a7edf32201df.png)
 
+## ISP
+
+```debian
+apt-cdrom add
+apt install -y network-manager bind9 chrony 
+nmcli connection show
+nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '3.3.3.1/24'
+nmcli connection modify Wired\ connection\ 2 conn.autoconnect yes conn.interface-name ens224 ipv4.method manual ipv4.addresses '4.4.4.1/24'
+nmcli connection modify Wired\ connection\ 3 conn.autoconnect yes conn.interface-name ens256 ipv4.method manual ipv4.addresses '5.5.5.1/24'
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149140670-2d614562-4038-4103-ad34-49044058eff0.png)
+
+
+## CLI
+
+```powershell
+$GetIndex = Get-NetAdapter
+New-NetIPAddress -InterfaceIndex $GetIndex.ifIndex -IPAddress 3.3.3.10 -PrefixLength 24 -DefaultGateway 3.3.3.1
+Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("3.3.3.1")
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149141167-2233dd9d-3bb8-46eb-b00e-2c8aae2b09a5.png)
