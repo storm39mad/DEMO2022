@@ -70,6 +70,7 @@ do wr
 ```powershell
 Rename-Computer -NewName SRV-XX
 ```
+
 ![image](https://user-images.githubusercontent.com/79700810/149132196-2d6adb20-5d45-4b81-bb11-c7f2a9e4091a.png)
 
 ## WEB-L
@@ -113,7 +114,53 @@ int gi 2
 ip address 192.168.100.254 255.255.255.0
 no sh
 end
+wr
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149131532-441bf23b-1cc1-443a-90e5-6fd6863248bb.png)
+
+## RTR-R
+
+```cisco
+int gi 1
+ip address 5.5.5.1 255.255.255.0
+no sh
+int gi 2
+ip address 172.16.100.254 255.255.255.0
+no sh
+end
+wr
+```
+![image](https://user-images.githubusercontent.com/79700810/149136014-1b7f6173-e5c7-404e-ac77-120f11947809.png)
+
+## SRV
+
+```powershell
+$GetIndex = Get-NetAdapter
+New-NetIPAddress -InterfaceIndex $GetIndex.ifIndex -IPAddress 192.168.100.200 -PrefixLength 24 -DefaultGateway 192.168.100.254
+Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("192.168.100.200","4.4.4.1")
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149136645-da7a2f8c-a223-4961-aeb6-a4276bbe4b6d.png)
+
+## WEB-L
+
+```debian
+apt-cdrom add
+apt install -y network-manager
+nmcli connection show
+nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '192.168.100.100/24' ipv4.dns 192.168.100.200 ipv4.gateway 192.168.100.254
+```
+![image](https://user-images.githubusercontent.com/79700810/149137520-04fb65d6-ac34-4e2f-a4d8-f6eed3011574.png)
+
+## WEB-R
+
+```debian
+apt-cdrom add
+apt install -y network-manager
+nmcli connection show
+nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '172.16.100/24' ipv4.dns 5.5.5.1 ipv4.gateway 172.16.100.254
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149138018-65de91c7-6431-45fe-884b-a7edf32201df.png)
 
