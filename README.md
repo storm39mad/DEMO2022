@@ -190,3 +190,9 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149141167-2233dd9d-3bb8-46eb-b00e-2c8aae2b09a5.png)
+
+## Сетевая связность.
+В рамках данного модуля требуется обеспечить сетевую связность между
+регионами работы приложения, а также обеспечить выход ВМ в имитируемую
+сеть “Интернет”. 
+
