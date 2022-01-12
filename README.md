@@ -196,3 +196,34 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 регионами работы приложения, а также обеспечить выход ВМ в имитируемую
 сеть “Интернет”. 
 
+ISP
+
+nano /etc/sysctl.conf
+-----------------------
+   net.ipv4.ip_forward=1
+-----------------------
+
+RTR-L-XX
+
+
+ip route 0.0.0.0 0.0.0.0 4.4.4.1
+
+RTR-R-XX
+
+ip route 0.0.0.0 0.0.0.0 5.5.5.1
+
+RTR-L-XX
+
+interface Tunne 1
+ip address 172.16.1.1 255.255.255.0
+tunnel mode gre ip
+tunnel source 4.4.4.100
+tunnel destination 5.5.5.100
+
+RTR-R-XX
+
+interface Tunne 1
+ip address 172.16.1.2 255.255.255.0
+tunnel mode gre ip
+tunnel source 5.5.5.100
+tunnel destination 4.4.4.100
