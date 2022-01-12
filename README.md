@@ -41,3 +41,79 @@
 |                |                    |                |                |5.5.5.1/24            |                                   |
 |                |                    |                |                |3.3.3.1/24            |                                   |
 |CLI             |Win 10              |4 GB            |4               |3.3.3.10/24           |                                   |
+
+
+## Имена хостов в созданных ВМ должны быть установлены в соответствии со схемой.
+## RTR-L
+
+```cisco
+en
+conf t
+hostname RTR-L-XX
+do wr
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149130676-f87df5f2-ff68-42f9-9ad6-12397ffa7da1.png)
+
+## RTR-R
+
+```cisco
+en
+conf t
+hostname RTR-R-XX
+do wr
+```
+![image](https://user-images.githubusercontent.com/79700810/149131854-405305c4-0836-45f3-84d2-216de66648bb.png)
+
+## SRV
+
+```powershell
+Rename-Computer -NewName SRV-XX
+```
+![image](https://user-images.githubusercontent.com/79700810/149132196-2d6adb20-5d45-4b81-bb11-c7f2a9e4091a.png)
+
+## WEB-L
+
+```debian
+hostnamectl set-hostname WEB-L-XX
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149132399-17daa67d-9e3a-4ed9-ac7f-a16ceb841839.png)
+
+## WEB-R
+
+```debian
+hostnamectl set-hostname WEB-R-XX
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149132565-36c043eb-5a6f-48a1-89e4-2d98929a2af6.png)
+
+## ISP
+
+```debian
+hostnamectl set-hostname ISP-XX
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149132932-73fa60e9-37ce-448c-8a7b-a1176f9ac814.png)
+
+## CLI
+
+```powershell
+Rename-Computer -NewName CLI-XX
+```
+
+## Коммутацию (если таковая не выполнена) выполните в соответствии со схемой сети.
+## RTR-L
+```cisco
+int gi 1
+ip address 4.4.4.1 255.255.255.0
+no sh
+
+int gi 2
+ip address 192.168.100.254 255.255.255.0
+no sh
+end
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149131532-441bf23b-1cc1-443a-90e5-6fd6863248bb.png)
+
