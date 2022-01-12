@@ -199,9 +199,9 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 ISP
 
 nano /etc/sysctl.conf
------------------------
+
    net.ipv4.ip_forward=1
------------------------
+
 
 RTR-L-XX
 
