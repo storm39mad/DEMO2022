@@ -196,23 +196,23 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 регионами работы приложения, а также обеспечить выход ВМ в имитируемую
 сеть “Интернет”. 
 
-ISP forward
+## ISP forward
 
 nano /etc/sysctl.conf
 
    net.ipv4.ip_forward=1
 
 
-RTR-L-XX Gitw
+## RTR-L-XX Gitw
 
 
 ip route 0.0.0.0 0.0.0.0 4.4.4.1
 
-RTR-R-XX gitw
+## RTR-R-XX gitw
 
 ip route 0.0.0.0 0.0.0.0 5.5.5.1
 
-RTR-L-XX GRE
+## RTR-L-XX GRE
 
 interface Tunne 1
 ip address 172.16.1.1 255.255.255.0
@@ -220,7 +220,7 @@ tunnel mode gre ip
 tunnel source 4.4.4.100
 tunnel destination 5.5.5.100
 
-RTR-R-XX GRE
+## RTR-R-XX GRE
 
 interface Tunne 1
 ip address 172.16.1.2 255.255.255.0
@@ -229,11 +229,11 @@ tunnel source 5.5.5.100
 tunnel destination 4.4.4.100
 
 
-NAT
+## NAT
 на внутр. интерфейсе - ip nat inside
 на внешн. интерфейсе - ip nat outside
 
-RTR-L-XX NAT
+## RTR-L-XX NAT
 
 
 int gi 1
@@ -245,7 +245,7 @@ ip nat inside
 access-list 1 permit 192.168.100.0 0.0.0.255
 ip nat inside source list 1 interface Gi1 overload
 
-RTR-R-XX NAT
+## RTR-R-XX NAT
 
 int gi 1
 ip nat outside
@@ -257,7 +257,7 @@ access-list 1 permit 172.16.100.0 0.0.0.255
 ip nat inside source list 1 interface Gi1 overload
 
 
-RTR-L-XX
+## RTR-L-XX
 
 crypto isakmp policy 1
 encr aes
@@ -278,7 +278,7 @@ interface Tunnel1
 tunnel mode ipsec ipv4
 tunnel protection ipsec profile VTI
 
-RTR-R-XX
+## RTR-R-XX
 
 conf t
 
