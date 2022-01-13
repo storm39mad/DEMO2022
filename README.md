@@ -309,8 +309,11 @@ permit udp any any eq 53
 permit tcp any any eq 80
 permit tcp any any eq 443
 permit tcp any any eq echo
-permit tcp any any eq 22
+permit tcp any any eq 2222
 permit icmp any any
+permit esp any any
+permit udp host 5.5.5.100 host 4.4.4.100 eq 4500
+permit udp host 5.5.5.100 host 4.4.4.100 eq 500
 
 int gi 1
 ip access-group L in
@@ -322,5 +325,82 @@ permit udp any any eq 53
 permit tcp any any eq 80
 permit tcp any any eq 443
 permit tcp any any eq echo
-permit tcp any any eq 22
+permit tcp any any eq 2244
 permit icmp any any
+permit esp any any
+permit udp host 4.4.4.100 host 5.5.5.100 eq 4500
+permit udp host 5.5.5.100 host 4.4.4.100 eq 500
+
+int gi 1
+ip access-group R in
+
+
+
+
+## SSH RTR-L-XX
+ip nat inside source static tcp 192.168.100.100 22 4.4.4.100 2222
+
+
+
+
+
+
+## SSH RTR-R-XX
+ip nat inside source static tcp 172.16.100.100 22 5.5.5.100 2244
+
+## SSH WEB-L-XX
+
+apt-cdrom add
+apt install -y openssh-server ssh
+systemctl start sshd
+systemctl enable ssh
+
+## SSH WEB-R-XX
+
+apt-cdrom add
+apt install -y openssh-server ssh
+systemctl start sshd
+systemctl enable ssh
+
+## ISP
+apt-cdrom add
+apt install -y bind9
+
+mkdir /opt/dns
+cp /etc/bind/db.local /opt/dns/demo.db
+chown -R bind:bind /opt/dns
+nano /etc/apparmor.d/usr.sbin.named
+```
+    /opt/dns/** rw,
+```
+
+systemctl restart apparmor.service
+
+nano /etc/bind/named.conf.default-zones
+```
+zone "demo.wsr" {
+   type master;
+   allow-transfer { any; };
+   file "/opt/dns/demo.db";
+};
+```
+
+nano /opt/dns/demo.db
+```
+@ IN SOA demo.wsr. root.demo.wsr.(
+```
+
+```
+@ IN NS isp-xx.demo.wsr.
+isp-xx IN A 3.3.3.1
+www IN 4.4.4.100
+www IN 5.5.5.100
+internet CNAME isp-xx.demo.wsr.
+```
+int IN NS rtr-l-xx.demo.wsr
+rtr-l-xx IN  A 4.4.4.100
+
+
+systemctl restatr bind9
+
+
