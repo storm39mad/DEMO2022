@@ -428,6 +428,39 @@ Install-WindowsFeature -Name DNS -IncludeManagementTools
 
 Add-DnsServerPrimaryZone -Name "int.demo.wsr" -ZoneFile "int.demo.wsr.dns"
 
-Add-DnsServerPrimaryZone -NetworkId 192.168.1.0/24 -ZoneFile "int.demo.wsr.dns"
+|Zone            |Type                |Key             |Meaning         |
+|  ------------- | -------------      | -------------  |  ------------- |
+| int.demo.wsr   | A                  | web-l-xx           | 192.168.100.100        |
+|                | A                  | web-r-xx            | 172.16.100.100      |
+|                | A                  | srv-xx            | 192.168.100.200      |
+|                | A                  | rtr-l-xx            | 192.168.100.254      |
+|                | A                  | rtr-r-xx           | 172.16.100.254 |
+|                | CNAME              | webapp        | web-l-xx            |
+|                | CNAME              | webapp       | web-r-xx            |
+|                | CNAME              | ntp       | srv-xx            |
+|                | CNAME              | dns       | srv-xx           |
 
 
+
+
+Add-DnsServerResourceRecordA -Name "web-l-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.1.100"
+Add-DnsServerResourceRecordA -Name "web-r-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.100" 
+Add-DnsServerResourceRecordA -Name "srv-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.200" 
+Add-DnsServerResourceRecordA -Name "rtr-l-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.254" 
+Add-DnsServerResourceRecordA -Name "rtr-r-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.254" 
+
+Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-l-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-r-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "ntp" -HostNameAlias "srv-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "dns" -HostNameAlias "srv-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
+
+## ISP NTP
+
+apt install -y chrony 
+
+nano /etc/chrony.conf
+
+local stratum 4
+allow 4.4.4.0/24
+
+systemctl restart chronyd 
