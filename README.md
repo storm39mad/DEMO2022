@@ -300,3 +300,27 @@ set transform-set TSET
 interface Tunnel1
 tunnel mode ipsec ipv4
 tunnel protection ipsec profile VTI
+
+## rtr-l-xx
+
+ip access-list extended L
+permit tcp any any eq 53
+permit udp any any eq 53
+permit tcp any any eq 80
+permit tcp any any eq 443
+permit tcp any any eq echo
+permit tcp any any eq 22
+permit icmp any any
+
+int gi 1
+ip access-group L in
+
+## rtr-r-xx
+ip access-list extended R
+permit tcp any any eq 53
+permit udp any any eq 53
+permit tcp any any eq 80
+permit tcp any any eq 443
+permit tcp any any eq echo
+permit tcp any any eq 22
+permit icmp any any
