@@ -196,23 +196,23 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 регионами работы приложения, а также обеспечить выход ВМ в имитируемую
 сеть “Интернет”. 
 
-ISP
+ISP forward
 
 nano /etc/sysctl.conf
 
    net.ipv4.ip_forward=1
 
 
-RTR-L-XX
+RTR-L-XX Gitw
 
 
 ip route 0.0.0.0 0.0.0.0 4.4.4.1
 
-RTR-R-XX
+RTR-R-XX gitw
 
 ip route 0.0.0.0 0.0.0.0 5.5.5.1
 
-RTR-L-XX
+RTR-L-XX GRE
 
 interface Tunne 1
 ip address 172.16.1.1 255.255.255.0
@@ -220,7 +220,7 @@ tunnel mode gre ip
 tunnel source 4.4.4.100
 tunnel destination 5.5.5.100
 
-RTR-R-XX
+RTR-R-XX GRE
 
 interface Tunne 1
 ip address 172.16.1.2 255.255.255.0
@@ -233,7 +233,7 @@ NAT
 на внутр. интерфейсе - ip nat inside
 на внешн. интерфейсе - ip nat outside
 
-RTR-L-XX
+RTR-L-XX NAT
 
 
 int gi 1
@@ -245,7 +245,7 @@ ip nat inside
 access-list 1 permit 192.168.100.0 0.0.0.255
 ip nat inside source list 1 interface Gi1 overload
 
-RTR-R-XX
+RTR-R-XX NAT
 
 int gi 1
 ip nat outside
@@ -255,3 +255,48 @@ ip nat inside
 
 access-list 1 permit 172.16.100.0 0.0.0.255
 ip nat inside source list 1 interface Gi1 overload
+
+
+RTR-L-XX
+
+crypto isakmp policy 1
+encr aes
+authentication pre-share
+hash sha256
+group 14
+!
+crypto isakmp key TheSecretMustBeAtLeast13bytes address 5.5.5.100
+crypto isakmp nat keepalive 5
+!
+crypto ipsec transform-set TSET  esp-aes 256 esp-sha256-hmac
+mode tunnel
+!
+crypto ipsec profile VTI
+set transform-set TSET
+
+interface Tunnel1
+tunnel mode ipsec ipv4
+tunnel protection ipsec profile VTI
+
+RTR-R-XX
+
+conf t
+
+crypto isakmp policy 1
+encr aes
+authentication pre-share
+hash sha256
+group 14
+!
+crypto isakmp key TheSecretMustBeAtLeast13bytes address 4.4.4.100
+crypto isakmp nat keepalive 5
+!
+crypto ipsec transform-set TSET  esp-aes 256 esp-sha256-hmac
+mode tunnel
+!
+crypto ipsec profile VTI
+set transform-set TSET
+
+interface Tunnel1
+tunnel mode ipsec ipv4
+tunnel protection ipsec profile VTI
