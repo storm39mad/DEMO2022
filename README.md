@@ -220,6 +220,9 @@ tunnel mode gre ip
 tunnel source 4.4.4.100
 tunnel destination 5.5.5.100
 
+router eigrp 6500
+network 192.168.0.0 0.0.255.255
+network 172.16.0.0 0.0.0.255
 ## RTR-R-XX GRE
 
 interface Tunne 1
@@ -228,6 +231,9 @@ tunnel mode gre ip
 tunnel source 5.5.5.100
 tunnel destination 4.4.4.100
 
+router eigrp 6500
+network 192.168.0.0 0.0.255.255
+network 172.16.0.0 0.0.0.255
 
 ## NAT
 на внутр. интерфейсе - ip nat inside
