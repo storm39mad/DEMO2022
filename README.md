@@ -368,6 +368,18 @@ apt install -y openssh-server ssh
 systemctl start sshd
 systemctl enable ssh
 
+
+## Инфраструктурные службы
+
+|Zone            |Type                |Key             |Meaning         |
+|  ------------- | -------------      | -------------  |  ------------- |
+| demo.wsr       | A                  | isp            | 3.3.3.1        |
+|                | A                  | www            | 4.4.4.100      |
+|                | A                  | www            | 5.5.5.100      |
+|                | CNAME              | internet       | isp            |
+|                | NS                 | int-xx         | rtr-l-xx.demo.wsr      |
+|                | A                  | rtr-l-xx       | 4.4.4.100      |
+
 ## ISP
 apt-cdrom add
 apt install -y bind9
@@ -409,5 +421,13 @@ rtr-l-xx IN  A 4.4.4.100
 
 
 systemctl restatr bind9
+
+## SRV
+
+Install-WindowsFeature -Name DNS -IncludeManagementTools
+
+Add-DnsServerPrimaryZone -Name "int.demo.wsr" -ZoneFile "int.demo.wsr.dns"
+
+Add-DnsServerPrimaryZone -NetworkId 192.168.1.0/24 -ZoneFile "int.demo.wsr.dns"
 
 
