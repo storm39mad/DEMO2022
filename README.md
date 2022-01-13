@@ -377,7 +377,7 @@ systemctl enable ssh
 |                | A                  | www            | 4.4.4.100      |
 |                | A                  | www            | 5.5.5.100      |
 |                | CNAME              | internet       | isp            |
-|                | NS                 | int-xx         | rtr-l-xx.demo.wsr      |
+|                | NS                 | int            | rtr-l-xx.demo.wsr      |
 |                | A                  | rtr-l-xx       | 4.4.4.100      |
 
 ## ISP
