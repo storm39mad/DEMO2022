@@ -307,7 +307,7 @@ interface Tunnel1
 tunnel mode ipsec ipv4
 tunnel protection ipsec profile VTI
 
-## rtr-l-xx
+## rtr-l-xx !!!!
 
 ip access-list extended L
 permit tcp any any eq 53
@@ -324,7 +324,7 @@ permit udp host 5.5.5.100 host 4.4.4.100 eq 500
 int gi 1
 ip access-group L in
 
-## rtr-r-xx
+## rtr-r-xx !!!!
 ip access-list extended R
 permit tcp any any eq 53
 permit udp any any eq 53
@@ -371,6 +371,11 @@ systemctl enable ssh
 
 ## Инфраструктурные службы
 
+
+
+
+## ISP
+
 |Zone            |Type                |Key             |Meaning         |
 |  ------------- | -------------      | -------------  |  ------------- |
 | demo.wsr       | A                  | isp            | 3.3.3.1        |
@@ -379,8 +384,6 @@ systemctl enable ssh
 |                | CNAME              | internet       | isp            |
 |                | NS                 | int            | rtr-l-xx.demo.wsr      |
 |                | A                  | rtr-l-xx       | 4.4.4.100      |
-
-## ISP
 apt-cdrom add
 apt install -y bind9
 
@@ -421,6 +424,15 @@ rtr-l-xx IN  A 4.4.4.100
 
 
 systemctl restatr bind9
+
+
+## RTR-L-XX
+
+ip nat inside source static tcp 192.168.100.200 53 4.4.4.100 53
+
+ip nat inside source static udp 192.168.100.200 53 4.4.4.100 53
+
+
 
 ## SRV
 
@@ -464,3 +476,33 @@ local stratum 4
 allow 4.4.4.0/24
 
 systemctl restart chronyd 
+
+
+## SRV NTP
+
+New-NetFirewallRule -DisplayName "NTP" -Direction Inbound -LocalPort 123 -Protocol UDP -Action Allow
+
+w32tm /query /status
+Start-Service W32Time
+w32tm /config /manualpeerlist:4.4.4.1 /syncfromflags:manual /reliable:yes /update
+Restart-Service W32Time
+
+## CLI NTP
+
+New-NetFirewallRule -DisplayName "NTP" -Direction Inbound -LocalPort 123 -Protocol UDP -Action Allow
+Start-Service W32Time
+w32tm /config /manualpeerlist:4.4.4.1 /syncfromflags:manual /reliable:yes /update
+Restart-Service W32Time
+
+
+## RTR-L-XX
+
+SRV
+
+Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True -Profile Any
+
+
+ip domain name int.demo.wsr
+ip name-server 192.168.100.200
+
+ntp server ntp.int.demo.wsr
