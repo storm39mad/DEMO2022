@@ -107,7 +107,7 @@ Rename-Computer -NewName CLI-XX
 
 
 ## Адресация должна быть выполнена в соответствии с Таблицей 1;
-## RTR-L
+## RTR-L-XX
 ```cisco
 int gi 1
 ip address 4.4.4.100 255.255.255.0
@@ -122,7 +122,7 @@ wr
 
 ![image](https://user-images.githubusercontent.com/79700810/149131532-441bf23b-1cc1-443a-90e5-6fd6863248bb.png)
 
-## RTR-R
+## RTR-R-XX
 
 ```cisco
 int gi 1
@@ -136,7 +136,7 @@ wr
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149136014-1b7f6173-e5c7-404e-ac77-120f11947809.png)
 
-## SRV
+## SRV-XX
 
 ```powershell
 $GetIndex = Get-NetAdapter
@@ -146,7 +146,7 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 
 ![image](https://user-images.githubusercontent.com/79700810/149136645-da7a2f8c-a223-4961-aeb6-a4276bbe4b6d.png)
 
-## WEB-L
+## WEB-L-XX
 
 ```debian
 apt-cdrom add
@@ -156,7 +156,7 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149137520-04fb65d6-ac34-4e2f-a4d8-f6eed3011574.png)
 
-## WEB-R
+## WEB-R-XX
 
 ```debian
 apt-cdrom add
@@ -167,7 +167,7 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 
 ![image](https://user-images.githubusercontent.com/79700810/149138018-65de91c7-6431-45fe-884b-a7edf32201df.png)
 
-## ISP
+## ISP-XX
 
 ```debian
 apt-cdrom add
@@ -494,8 +494,9 @@ Start-Service W32Time
 w32tm /config /manualpeerlist:4.4.4.1 /syncfromflags:manual /reliable:yes /update
 Restart-Service W32Time
 
+![image](https://user-images.githubusercontent.com/79700810/149523036-1db4eeca-ca6b-491a-9d19-d6c097a7ca80.png)
 
-## RTR-L-XX
+## RTR-L-XX NTP
 
 SRV
 
@@ -507,7 +508,7 @@ ip name-server 192.168.100.200
 
 ntp server ntp.int.demo.wsr
 
-## WEB-L-XX
+## WEB-L-XX NTP
 
 apt-cdrom add
 
@@ -520,14 +521,14 @@ pool ntp.int.demo.wsr iburst
 allow 192.168.100.0/24
 
 systemctl restart chrony
-## RTR-R-XX
+## RTR-R-XX NTP
 
 ip domain name int.demo.wsr
 ip name-server 192.168.100.200
 
 ntp server ntp.int.demo.wsr
 
-## WEB-R-XX
+## WEB-R-XX NTP
 
 apt-cdrom add
 
@@ -540,3 +541,32 @@ pool ntp.int.demo.wsr iburst
 allow 192.168.100.0/24
 
 systemctl restart chrony
+
+
+## SRV SMB
+
+get-disk
+
+set-disk -Number 1 -IsOffline $false
+set-disk -Number 2 -IsOffline $false
+
+New-StoragePool -FriendlyName "POOLRAID1" -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks (Get-PhysicalDisk -CanPool $true)
+
+New-VirtualDisk -StoragePoolFriendlyName "POOLRAID1" -FriendlyName "RAID1" -ResiliencySettingName Mirror -UseMaximumSize
+
+Initialize-Disk -FriendlyName "RAID1"
+
+New-Partition -DiskNumber 3 -UseMaximumSize -DriveLetter R
+
+Format-Volume -DriveLetter R
+
+## SRV NFS
+
+Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools
+
+Install-WindowsFeature -Name FS-NFS-Service -IncludeManagementTools
+
+New-Item -Path R:\storage -ItemType Directory
+
+New-NfsShare -Name "NFSshare" -Path "R:\shares"  -Permission Readwrite
+
