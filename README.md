@@ -506,3 +506,37 @@ ip domain name int.demo.wsr
 ip name-server 192.168.100.200
 
 ntp server ntp.int.demo.wsr
+
+## WEB-L-XX
+
+apt-cdrom add
+
+apt install -y chrony 
+
+nano /etc/chrony/chrony.conf
+
+pool ntp.int.demo.wsr iburst
+
+allow 192.168.100.0/24
+
+systemctl restart chrony
+## RTR-R-XX
+
+ip domain name int.demo.wsr
+ip name-server 192.168.100.200
+
+ntp server ntp.int.demo.wsr
+
+## WEB-R-XX
+
+apt-cdrom add
+
+apt install -y chrony 
+
+nano /etc/chrony/chrony.conf
+
+pool ntp.int.demo.wsr iburst
+
+allow 192.168.100.0/24
+
+systemctl restart chrony
