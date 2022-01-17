@@ -162,7 +162,7 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 apt-cdrom add
 apt install -y network-manager
 nmcli connection show
-nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '172.16.100/24' ipv4.dns 5.5.5.1 ipv4.gateway 172.16.100.254
+nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '172.16.100/24' ipv4.dns 192.168.100.200 ipv4.gateway 172.16.100.254
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149138018-65de91c7-6431-45fe-884b-a7edf32201df.png)
@@ -406,6 +406,9 @@ Install-WindowsFeature -Name DNS -IncludeManagementTools
 
 Add-DnsServerPrimaryZone -Name "int.demo.wsr" -ZoneFile "int.demo.wsr.dns"
 
+Add-DnsServerPrimaryZone -NetworkId 192.168.100.0/24 -ZoneFile "int.demo.wsr.dns"
+Add-DnsServerPrimaryZone -NetworkId 172.16.100.0/24 -ZoneFile "int.demo.wsr.dns"
+
 |Zone            |Type                |Key             |Meaning         |
 |  ------------- | -------------      | -------------  |  ------------- |
 | int.demo.wsr   | A                  | web-l-xx           | 192.168.100.100        |
@@ -421,11 +424,11 @@ Add-DnsServerPrimaryZone -Name "int.demo.wsr" -ZoneFile "int.demo.wsr.dns"
 
 
 
-Add-DnsServerResourceRecordA -Name "web-l-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.1.100"
-Add-DnsServerResourceRecordA -Name "web-r-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.100" 
-Add-DnsServerResourceRecordA -Name "srv-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.200" 
-Add-DnsServerResourceRecordA -Name "rtr-l-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.254" 
-Add-DnsServerResourceRecordA -Name "rtr-r-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.254" 
+Add-DnsServerResourceRecordA -Name "web-l-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.100" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "web-r-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.100" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "srv-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.200" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "rtr-l-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.254" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "rtr-r-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.254" -CreatePtr 
 
 Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-l-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
 Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-r-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
