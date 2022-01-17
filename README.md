@@ -307,40 +307,6 @@ interface Tunnel1
 tunnel mode ipsec ipv4
 tunnel protection ipsec profile VTI
 
-## rtr-l-xx !!!!
-
-ip access-list extended L
-permit tcp any any eq 53
-permit udp any any eq 53
-permit tcp any any eq 80
-permit tcp any any eq 443
-permit tcp any any eq echo
-permit tcp any any eq 2222
-permit icmp any any
-permit esp any any
-permit udp host 5.5.5.100 host 4.4.4.100 eq 4500
-permit udp host 5.5.5.100 host 4.4.4.100 eq 500
-
-int gi 1
-ip access-group L in
-
-## rtr-r-xx !!!!
-ip access-list extended R
-permit tcp any any eq 53
-permit udp any any eq 53
-permit tcp any any eq 80
-permit tcp any any eq 443
-permit tcp any any eq echo
-permit tcp any any eq 2244
-permit icmp any any
-permit esp any any
-permit udp host 4.4.4.100 host 5.5.5.100 eq 4500
-permit udp host 5.5.5.100 host 4.4.4.100 eq 500
-
-int gi 1
-ip access-group R in
-
-
 
 
 ## SSH RTR-L-XX
@@ -668,12 +634,19 @@ ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443
 ## SRV ssl
 
 ![image](https://user-images.githubusercontent.com/79700810/149763282-2b6d46b0-836a-450d-84ba-8f25bc488157.png)
+
 ![image](https://user-images.githubusercontent.com/79700810/149763302-ed88dc08-9bd7-4a15-8a47-59bc5ee92649.png)
-![image](https://user-images.githubusercontent.com/79700810/149763436-60b5a8fe-5880-4dcc-949e-ad6f9d90c5c7.png)
+
+![image](https://user-images.githubusercontent.com/79700810/149766791-01f84de0-d512-4693-942a-1ab0855254a1.png)
+
 ![image](https://user-images.githubusercontent.com/79700810/149763486-8c0dfe06-400f-421c-abe2-d63678ae0418.png)
+
 ![image](https://user-images.githubusercontent.com/79700810/149763513-cb821774-83ce-40f9-a47d-eaa3941504a5.png)
+
 ![image](https://user-images.githubusercontent.com/79700810/149763553-5a666a1c-6069-4022-9e20-1e3041d345b7.png)
+
 ![image](https://user-images.githubusercontent.com/79700810/149763685-b0dfb33e-ed50-4de6-937c-1aab86524df9.png)
+
 
 ![image](https://user-images.githubusercontent.com/79700810/149763717-75fa754c-4084-4923-acd8-7dc85201fdb1.png)
 
@@ -687,20 +660,99 @@ ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443
 
 
 
-!!!!
-![image](https://user-images.githubusercontent.com/79700810/149766791-01f84de0-d512-4693-942a-1ab0855254a1.png)
 
-## WEB-L-XX
+## WEB-L-XX ssl
+
+
 
 cd /opt/share
+
 openssl pkcs12 -nodes -nocerts -in www.pfx -out www.key
+
 openssl pkcs12 -nodes -nokeys -in www.pfx -out www.cer
 
+cp /opt/share /etc/nginx/www.key
+
+cp /opt/share /etc/nginx/www.cer
 
 ![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
 
+/etc/nginx/sites-enabled/default
+
 ![image](https://user-images.githubusercontent.com/79700810/149767856-4de23e3a-cf68-4b51-9949-9aa22642644b.png)
 
+
+systemctl reload nginx
+
+## WEB-R-XX ssl
+
+cd /opt/share
+
+openssl pkcs12 -nodes -nocerts -in www.pfx -out www.key
+
+openssl pkcs12 -nodes -nokeys -in www.pfx -out www.cer
+
+cp /opt/share /etc/nginx/www.key
+
+cp /opt/share /etc/nginx/www.cer
+
+![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
+
+/etc/nginx/sites-enabled/default
+
+![image](https://user-images.githubusercontent.com/79700810/149767856-4de23e3a-cf68-4b51-9949-9aa22642644b.png)
+
+
+systemctl reload nginx
+
+## SRV ssl
+
+## WEB-R-XX ssl
+ssh 
+
+![image](https://user-images.githubusercontent.com/79700810/149774137-4c65faa7-a467-4b2f-a2ce-c1f6616f0c54.png)
+
+![image](https://user-images.githubusercontent.com/79700810/149774186-c83b7b0a-5f67-41bb-9051-b26897840154.png)
+
+## CLI-xx ssl
+
+scp -P 2244 'root@5.5.5.100:/opt/share/ca.cer' C:\Users\Admin\Desktop\
+![image](https://user-images.githubusercontent.com/79700810/149774248-784bebe3-8015-414f-88dc-e96f91dfd395.png)\
+
+
+## rtr-l-xx ACL
+
+ip access-list extended L
+permit tcp any any eq 53
+permit udp any any eq 53
+permit tcp any any eq 80
+permit tcp any any eq 443
+permit tcp any any eq echo
+permit tcp any any eq 2222
+permit icmp any any
+permit esp any any
+permit udp host 5.5.5.100 host 4.4.4.100 eq 4500
+permit udp host 5.5.5.100 host 4.4.4.100 eq 500
+
+int gi 1
+ip access-group L in
+
+## rtr-r-xx ACL
+
+ip access-list extended R
+permit tcp any any eq 53
+permit udp any any eq 53
+permit tcp any any eq 80
+permit tcp any any eq 443
+permit tcp any any eq echo
+permit tcp any any eq 2244
+permit icmp any any
+permit esp any any
+permit udp host 4.4.4.100 host 5.5.5.100 eq 4500
+permit udp host 5.5.5.100 host 4.4.4.100 eq 500
+
+int gi 1
+ip access-group R in
 
 
 
