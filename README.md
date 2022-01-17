@@ -576,6 +576,8 @@ Install-AdcsCertificationAuthority -CAType StandaloneRootCa -CACommonName "Demo.
 
 Install-AdcsWebEnrollment -Confirm -force
 
+## Инфраструктура веб-приложения.
+
 ## WEB-L-XX Doc
 
 apt-cdrom add
