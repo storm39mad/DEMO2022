@@ -626,7 +626,7 @@ mount /dev/sr1 /mnt/app
 docker load < /mnt/app/app.tar
 
 docker images
-docker run --name app  -p 80:80 -d app
+docker run --name app  -p 8080:80 -d app
 docker ps
 ## WEB-R-XX Doc
 
@@ -644,7 +644,7 @@ mount /dev/sr1 /mnt/app
 docker load < /mnt/app/app.tar
 
 docker images
-docker run --name app  -p 80:80 -d app
+docker run --name app  -p 8080:80 -d app
 docker ps
 
 ## RTR-L-XX
@@ -664,4 +664,43 @@ reload
 
 ip nat inside source static tcp 172.16.100.100 80 5.5.5.100 80 
 ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443 
+
+## SRV ssl
+
+![image](https://user-images.githubusercontent.com/79700810/149763282-2b6d46b0-836a-450d-84ba-8f25bc488157.png)
+![image](https://user-images.githubusercontent.com/79700810/149763302-ed88dc08-9bd7-4a15-8a47-59bc5ee92649.png)
+![image](https://user-images.githubusercontent.com/79700810/149763436-60b5a8fe-5880-4dcc-949e-ad6f9d90c5c7.png)
+![image](https://user-images.githubusercontent.com/79700810/149763486-8c0dfe06-400f-421c-abe2-d63678ae0418.png)
+![image](https://user-images.githubusercontent.com/79700810/149763513-cb821774-83ce-40f9-a47d-eaa3941504a5.png)
+![image](https://user-images.githubusercontent.com/79700810/149763553-5a666a1c-6069-4022-9e20-1e3041d345b7.png)
+![image](https://user-images.githubusercontent.com/79700810/149763685-b0dfb33e-ed50-4de6-937c-1aab86524df9.png)
+
+![image](https://user-images.githubusercontent.com/79700810/149763717-75fa754c-4084-4923-acd8-7dc85201fdb1.png)
+
+
+![image](https://user-images.githubusercontent.com/79700810/149763741-0e3281f3-b17b-4101-ad77-8dd21dfc7534.png)
+
+
+![image](https://user-images.githubusercontent.com/79700810/149763772-8f7acb37-379f-455e-9198-1117317d73ed.png)
+
+![image](https://user-images.githubusercontent.com/79700810/149763807-f91c2a81-d061-49bd-9b59-b93ae0e30ef3.png)
+
+
+
+!!!!
+![image](https://user-images.githubusercontent.com/79700810/149766791-01f84de0-d512-4693-942a-1ab0855254a1.png)
+
+## WEB-L-XX
+
+cd /opt/share
+openssl pkcs12 -nodes -nocerts -in www.pfx -out www.key
+openssl pkcs12 -nodes -nokeys -in www.pfx -out www.cer
+
+
+![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
+
+![image](https://user-images.githubusercontent.com/79700810/149767856-4de23e3a-cf68-4b51-9949-9aa22642644b.png)
+
+
+
 
