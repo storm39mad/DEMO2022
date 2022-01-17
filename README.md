@@ -602,10 +602,66 @@ mkdir /opt/share
 mount -a
 
 
-## SRV-XX
+## SRV-XX ADCS
 
 Install-WindowsFeature -Name AD-Certificate, ADCS-Web-Enrollment -IncludeManagementTools
 
 Install-AdcsCertificationAuthority -CAType StandaloneRootCa -CACommonName "Demo.wsr" -force
 
 Install-AdcsWebEnrollment -Confirm -force
+
+## WEB-L-XX Doc
+
+apt-cdrom add
+
+apt install -y docker-ce
+systemctl start docker
+systemctl enable docker
+
+
+mkdir /mnt/app
+
+mount /dev/sr1 /mnt/app
+
+docker load < /mnt/app/app.tar
+
+docker images
+docker run --name app  -p 80:80 -d app
+docker ps
+## WEB-R-XX Doc
+
+apt-cdrom add
+
+apt install -y docker-ce
+systemctl start docker
+systemctl enable docker
+
+
+mkdir /mnt/app
+
+mount /dev/sr1 /mnt/app
+
+docker load < /mnt/app/app.tar
+
+docker images
+docker run --name app  -p 80:80 -d app
+docker ps
+
+## RTR-L-XX
+
+no ip http secure-server
+wr
+reload
+
+ip nat inside source static tcp 192.168.100.100 80 4.4.4.100 80 
+ip nat inside source static tcp 192.168.100.100 443 4.4.4.100 443 
+
+## RTR-R-XX
+
+no ip http secure-server
+wr
+reload
+
+ip nat inside source static tcp 172.16.100.100 80 5.5.5.100 80 
+ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443 
+
