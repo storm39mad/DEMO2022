@@ -543,7 +543,7 @@ allow 192.168.100.0/24
 systemctl restart chrony
 
 
-## SRV SMB
+## SRV RAID
 
 get-disk
 
@@ -568,5 +568,44 @@ Install-WindowsFeature -Name FS-NFS-Service -IncludeManagementTools
 
 New-Item -Path R:\storage -ItemType Directory
 
-New-NfsShare -Name "NFSshare" -Path "R:\shares"  -Permission Readwrite
 
+New-NfsShare -Path "R:\shares" -Name nfs -Permission Readwrite
+
+
+
+
+## WEB-L-XX nfs
+
+apt-cdrom add
+apt -y install nfs-common
+
+nano /etc/fstab
+
+    #<file system>
+    srv-xx.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
+
+mkdir /opt/share
+mount -a
+
+
+## WEB-R-XX nfs
+
+apt-cdrom add
+apt -y install nfs-common
+
+nano /etc/fstab
+
+    #<file system>
+    srv-xx.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
+
+mkdir /opt/share
+mount -a
+
+
+## SRV-XX
+
+Install-WindowsFeature -Name AD-Certificate, ADCS-Web-Enrollment -IncludeManagementTools
+
+Install-AdcsCertificationAuthority -CAType StandaloneRootCa -CACommonName "Demo.wsr" -force
+
+Install-AdcsWebEnrollment -Confirm -force
