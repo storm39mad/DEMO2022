@@ -409,8 +409,8 @@ systemctl enable ssh
 |                | A                  | www            | 4.4.4.100      |
 |                | A                  | www            | 5.5.5.100      |
 |                | CNAME              | internet       | isp            |
-|                | NS                 | int            | rtr-l-xx.demo.wsr      |
-|                | A                  | rtr-l-xx       | 4.4.4.100      |
+|                | NS                 | int            | rtr-l.demo.wsr      |
+|                | A                  | rtr-l       | 4.4.4.100      |
 
 ```debian
 apt-cdrom add
@@ -770,7 +770,7 @@ Install-AdcsWebEnrollment -Confirm -force
 
 ### Инфраструктура веб-приложения.
 
-#### WEB-L-XX Doc
+#### WEB-L Doc
 
 ```debian
 apt-cdrom add
