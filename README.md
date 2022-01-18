@@ -905,7 +905,7 @@ nano /etc/nginx/snippets/snakeoil.conf
 nano /etc/nginx/sites-enabled/default
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149767856-4de23e3a-cf68-4b51-9949-9aa22642644b.png)
+![image](https://user-images.githubusercontent.com/79700810/149938053-50f5004e-198d-4b0a-93c0-b4d30cfb7774.png)
 
 ```debian
 systemctl reload nginx
@@ -936,7 +936,7 @@ nano /etc/nginx/snippets/snakeoil.conf
 nano /etc/nginx/sites-enabled/default
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149767856-4de23e3a-cf68-4b51-9949-9aa22642644b.png)
+![image](https://user-images.githubusercontent.com/79700810/149938064-b9f8e289-a7f2-4bc9-ab2b-62ac472b6fbf.png)
 
 ```debian
 systemctl reload nginx
