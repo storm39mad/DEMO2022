@@ -884,8 +884,9 @@ ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443
 
 
 ## WEB-L-XX ssl
-
-
+```debian
+apt install -y nginx
+```
 ```debian
 cd /opt/share
 ```
@@ -918,6 +919,10 @@ nano /etc/nginx/sites-enabled/default
 systemctl reload nginx
 ```
 ## WEB-R-XX ssl
+
+```debian
+apt install -y nginx
+```
 
 ```debian
 cd /opt/share
