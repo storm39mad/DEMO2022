@@ -49,7 +49,7 @@
 ```cisco
 en
 conf t
-hostname RTR-L-XX
+hostname RTR-L
 do wr
 ```
 
@@ -60,7 +60,7 @@ do wr
 ```cisco
 en
 conf t
-hostname RTR-R-XX
+hostname RTR-R
 do wr
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149131854-405305c4-0836-45f3-84d2-216de66648bb.png)
@@ -68,7 +68,7 @@ do wr
 ## SRV
 
 ```powershell
-Rename-Computer -NewName SRV-XX
+Rename-Computer -NewName SRV
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149132196-2d6adb20-5d45-4b81-bb11-c7f2a9e4091a.png)
@@ -76,7 +76,7 @@ Rename-Computer -NewName SRV-XX
 ## WEB-L
 
 ```debian
-hostnamectl set-hostname WEB-L-XX
+hostnamectl set-hostname WEB-L
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149132399-17daa67d-9e3a-4ed9-ac7f-a16ceb841839.png)
@@ -84,7 +84,7 @@ hostnamectl set-hostname WEB-L-XX
 ## WEB-R
 
 ```debian
-hostnamectl set-hostname WEB-R-XX
+hostnamectl set-hostname WEB-R
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149132565-36c043eb-5a6f-48a1-89e4-2d98929a2af6.png)
@@ -92,7 +92,7 @@ hostnamectl set-hostname WEB-R-XX
 ## ISP
 
 ```debian
-hostnamectl set-hostname ISP-XX
+hostnamectl set-hostname ISP
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149132932-73fa60e9-37ce-448c-8a7b-a1176f9ac814.png)
@@ -100,14 +100,14 @@ hostnamectl set-hostname ISP-XX
 ## CLI
 
 ```powershell
-Rename-Computer -NewName CLI-XX
+Rename-Computer -NewName CLI
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149140416-38cb1f3d-5be7-461d-a833-c1301d4e06a8.png)
 
 
 ## Адресация должна быть выполнена в соответствии с Таблицей 1;
-## RTR-L-XX
+## RTR-L
 ```cisco
 int gi 1
 ip address 4.4.4.100 255.255.255.0
@@ -122,7 +122,7 @@ wr
 
 ![image](https://user-images.githubusercontent.com/79700810/149131532-441bf23b-1cc1-443a-90e5-6fd6863248bb.png)
 
-## RTR-R-XX
+## RTR-R
 
 ```cisco
 int gi 1
@@ -136,7 +136,7 @@ wr
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149136014-1b7f6173-e5c7-404e-ac77-120f11947809.png)
 
-## SRV-XX
+## SRV
 
 ```powershell
 $GetIndex = Get-NetAdapter
@@ -144,9 +144,12 @@ New-NetIPAddress -InterfaceIndex $GetIndex.ifIndex -IPAddress 192.168.100.200 -P
 Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("192.168.100.200","4.4.4.1")
 ```
 
+```powershell
+Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True -Profile Any
+```
 ![image](https://user-images.githubusercontent.com/79700810/149136645-da7a2f8c-a223-4961-aeb6-a4276bbe4b6d.png)
 
-## WEB-L-XX
+## WEB-L
 
 ```debian
 apt-cdrom add
@@ -156,7 +159,7 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149137520-04fb65d6-ac34-4e2f-a4d8-f6eed3011574.png)
 
-## WEB-R-XX
+## WEB-R
 
 ```debian
 apt-cdrom add
@@ -167,7 +170,7 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 
 ![image](https://user-images.githubusercontent.com/79700810/149138018-65de91c7-6431-45fe-884b-a7edf32201df.png)
 
-## ISP-XX
+## ISP
 
 ```debian
 apt-cdrom add
@@ -198,73 +201,93 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 
 ## ISP forward
 
+```debian
 nano /etc/sysctl.conf
+```
 
+```debian
    net.ipv4.ip_forward=1
+```
 
+![image](https://user-images.githubusercontent.com/79700810/149896195-71778f11-2e69-4750-b6a0-9424d4dc8890.png)
 
-## RTR-L-XX Gitw
+## RTR-L Gitw
 
-
+```cisco
 ip route 0.0.0.0 0.0.0.0 4.4.4.1
+```
 
-## RTR-R-XX gitw
+## RTR-R gitw
 
+```cisco
 ip route 0.0.0.0 0.0.0.0 5.5.5.1
+```
 
-## RTR-L-XX GRE
+## RTR-L GRE
 
+```cisco
 interface Tunne 1
 ip address 172.16.1.1 255.255.255.0
 tunnel mode gre ip
 tunnel source 4.4.4.100
 tunnel destination 5.5.5.100
+```
 
+```cisco
 router eigrp 6500
 network 192.168.0.0 0.0.255.255
 network 172.16.0.0 0.0.0.255
-## RTR-R-XX GRE
+```
 
+## RTR-R
+
+```cisco
 interface Tunne 1
 ip address 172.16.1.2 255.255.255.0
 tunnel mode gre ip
 tunnel source 5.5.5.100
 tunnel destination 4.4.4.100
+```
 
+```cisco
 router eigrp 6500
 network 192.168.0.0 0.0.255.255
 network 172.16.0.0 0.0.0.255
+```
 
 ## NAT
 на внутр. интерфейсе - ip nat inside
 на внешн. интерфейсе - ip nat outside
 
-## RTR-L-XX NAT
+## RTR-L NAT
 
-
+```cisco
 int gi 1
 ip nat outside
-
+!
 int gi 2
 ip nat inside
-
+!
 access-list 1 permit 192.168.100.0 0.0.0.255
 ip nat inside source list 1 interface Gi1 overload
+```
 
-## RTR-R-XX NAT
+## RTR-R NAT
 
+```cisco
 int gi 1
 ip nat outside
-
+!
 int gi 2
 ip nat inside
-
+!
 access-list 1 permit 172.16.100.0 0.0.0.255
 ip nat inside source list 1 interface Gi1 overload
+```
 
+## RTR-L
 
-## RTR-L-XX
-
+```cisco
 crypto isakmp policy 1
 encr aes
 authentication pre-share
@@ -279,13 +302,17 @@ mode tunnel
 !
 crypto ipsec profile VTI
 set transform-set TSET
+```
 
+```cisco
 interface Tunnel1
 tunnel mode ipsec ipv4
 tunnel protection ipsec profile VTI
+```
 
-## RTR-R-XX
+## RTR-R
 
+```cisco
 conf t
 
 crypto isakmp policy 1
@@ -302,38 +329,51 @@ mode tunnel
 !
 crypto ipsec profile VTI
 set transform-set TSET
+```
 
+```cisco
 interface Tunnel1
 tunnel mode ipsec ipv4
 tunnel protection ipsec profile VTI
+```
 
 
+## SSH RTR-L
 
-## SSH RTR-L-XX
+```cisco
 ip nat inside source static tcp 192.168.100.100 22 4.4.4.100 2222
-
+```
 
 
 
 
 
 ## SSH RTR-R-XX
+
+```cisco
 ip nat inside source static tcp 172.16.100.100 22 5.5.5.100 2244
+```
 
 ## SSH WEB-L-XX
 
+```debian
 apt-cdrom add
 apt install -y openssh-server ssh
 systemctl start sshd
 systemctl enable ssh
+```
 
 ## SSH WEB-R-XX
 
+```debian
 apt-cdrom add
 apt install -y openssh-server ssh
+```
+
+```debian
 systemctl start sshd
 systemctl enable ssh
-
+```
 
 ## Инфраструктурные службы
 
@@ -350,21 +390,34 @@ systemctl enable ssh
 |                | CNAME              | internet       | isp            |
 |                | NS                 | int            | rtr-l-xx.demo.wsr      |
 |                | A                  | rtr-l-xx       | 4.4.4.100      |
+
+```debian
 apt-cdrom add
 apt install -y bind9
+```
 
+```debian
 mkdir /opt/dns
 cp /etc/bind/db.local /opt/dns/demo.db
 chown -R bind:bind /opt/dns
 nano /etc/apparmor.d/usr.sbin.named
 ```
+
+```debian
     /opt/dns/** rw,
 ```
 
-systemctl restart apparmor.service
+![image](https://user-images.githubusercontent.com/79700810/149896979-a9af8838-dc2a-450b-ac33-efbc1bd98ba8.png)
 
+```debian
+systemctl restart apparmor.service
+```
+
+```debian
 nano /etc/bind/named.conf.default-zones
 ```
+
+```debian
 zone "demo.wsr" {
    type master;
    allow-transfer { any; };
@@ -372,270 +425,394 @@ zone "demo.wsr" {
 };
 ```
 
+![image](https://user-images.githubusercontent.com/79700810/149897089-83a29cdb-e5b7-4747-ba0e-e97c600ec2ca.png)
+
+```debian
 nano /opt/dns/demo.db
 ```
+
+```debian
 @ IN SOA demo.wsr. root.demo.wsr.(
 ```
 
-```
-@ IN NS isp-xx.demo.wsr.
-isp-xx IN A 3.3.3.1
+```debian
+@ IN NS isp.demo.wsr.
+isp IN A 3.3.3.1
 www IN 4.4.4.100
 www IN 5.5.5.100
-internet CNAME isp-xx.demo.wsr.
-int IN NS rtr-l-xx.demo.wsr
-rtr-l-xx IN  A 4.4.4.100
+internet CNAME isp.demo.wsr.
+int IN NS rtr-l.demo.wsr
+rtr-l IN  A 4.4.4.100
 ```
 
+![image](https://user-images.githubusercontent.com/79700810/149897156-6b854933-a735-4813-bdf3-a9ea9944e16e.png)
 
 
+```debian
 systemctl restatr bind9
+```
 
+## RTR-L
 
-## RTR-L-XX
-
+```debian
 ip nat inside source static tcp 192.168.100.200 53 4.4.4.100 53
-
+!
 ip nat inside source static udp 192.168.100.200 53 4.4.4.100 53
-
+```
 
 
 ## SRV
 
+```powershell
 Install-WindowsFeature -Name DNS -IncludeManagementTools
+```
 
+```powershell
 Add-DnsServerPrimaryZone -Name "int.demo.wsr" -ZoneFile "int.demo.wsr.dns"
-
+```
+```powershell
 Add-DnsServerPrimaryZone -NetworkId 192.168.100.0/24 -ZoneFile "int.demo.wsr.dns"
 Add-DnsServerPrimaryZone -NetworkId 172.16.100.0/24 -ZoneFile "int.demo.wsr.dns"
+```
 
 |Zone            |Type                |Key             |Meaning         |
 |  ------------- | -------------      | -------------  |  ------------- |
-| int.demo.wsr   | A                  | web-l-xx           | 192.168.100.100        |
-|                | A                  | web-r-xx            | 172.16.100.100      |
-|                | A                  | srv-xx            | 192.168.100.200      |
-|                | A                  | rtr-l-xx            | 192.168.100.254      |
-|                | A                  | rtr-r-xx           | 172.16.100.254 |
-|                | CNAME              | webapp        | web-l-xx            |
-|                | CNAME              | webapp       | web-r-xx            |
-|                | CNAME              | ntp       | srv-xx            |
-|                | CNAME              | dns       | srv-xx           |
+| int.demo.wsr   | A                  | web-l           | 192.168.100.100        |
+|                | A                  | web-r           | 172.16.100.100      |
+|                | A                  | srv           | 192.168.100.200      |
+|                | A                  | rtr-l            | 192.168.100.254      |
+|                | A                  | rtr-r           | 172.16.100.254 |
+|                | CNAME              | webapp        | web-l            |
+|                | CNAME              | webapp       | web-r            |
+|                | CNAME              | ntp       | srv            |
+|                | CNAME              | dns       | srv           |
 
 
 
+```powershell
+Add-DnsServerResourceRecordA -Name "web-l" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.100" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "web-r" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.100" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "srv" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.200" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "rtr-l" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.254" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "rtr-r" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.254" -CreatePtr 
+```
 
-Add-DnsServerResourceRecordA -Name "web-l-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.100" -CreatePtr 
-Add-DnsServerResourceRecordA -Name "web-r-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.100" -CreatePtr 
-Add-DnsServerResourceRecordA -Name "srv-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.200" -CreatePtr 
-Add-DnsServerResourceRecordA -Name "rtr-l-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.100.254" -CreatePtr 
-Add-DnsServerResourceRecordA -Name "rtr-r-xx" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.254" -CreatePtr 
-
-Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-l-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
-Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-r-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
-Add-DnsServerResourceRecordCName -Name "ntp" -HostNameAlias "srv-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
-Add-DnsServerResourceRecordCName -Name "dns" -HostNameAlias "srv-xx.int.demo.wsr" -ZoneName "int.demo.wsr"
+```powershell
+Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-l.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-r.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "ntp" -HostNameAlias "srv.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "dns" -HostNameAlias "srv.int.demo.wsr" -ZoneName "int.demo.wsr"
+```
 
 ## ISP NTP
 
+```debian
 apt install -y chrony 
+```
 
-nano /etc/chrony.conf
+```debian
+nano /etc/chrony/chrony.conf
+```
 
+```debian
 local stratum 4
 allow 4.4.4.0/24
+allow 3.3.3.0/24
+```
+![image](https://user-images.githubusercontent.com/79700810/149897796-b798dc28-2555-4aa4-9043-9340dda17f57.png)
 
+```debian
 systemctl restart chronyd 
-
+```
 
 ## SRV NTP
 
-New-NetFirewallRule -DisplayName "NTP" -Direction Inbound -LocalPort 123 -Protocol UDP -Action Allow
 
+```powershell
+New-NetFirewallRule -DisplayName "NTP" -Direction Inbound -LocalPort 123 -Protocol UDP -Action Allow
+```
+
+```powershell
 w32tm /query /status
 Start-Service W32Time
 w32tm /config /manualpeerlist:4.4.4.1 /syncfromflags:manual /reliable:yes /update
 Restart-Service W32Time
+```
 
 ## CLI NTP
 
+```powershell
 New-NetFirewallRule -DisplayName "NTP" -Direction Inbound -LocalPort 123 -Protocol UDP -Action Allow
+```
+
+```powershell
 Start-Service W32Time
 w32tm /config /manualpeerlist:4.4.4.1 /syncfromflags:manual /reliable:yes /update
 Restart-Service W32Time
+```
+
 
 ![image](https://user-images.githubusercontent.com/79700810/149523036-1db4eeca-ca6b-491a-9d19-d6c097a7ca80.png)
 
-## RTR-L-XX NTP
-
-SRV
-
-Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True -Profile Any
+## RTR-L NTP
 
 
+
+```cisco
 ip domain name int.demo.wsr
 ip name-server 192.168.100.200
+```
 
+```cisco
 ntp server ntp.int.demo.wsr
+```
+
+## RTR-R-XX NTP
+
+```cisco
+ip domain name int.demo.wsr
+ip name-server 192.168.100.200
+```
+
+```cisco
+ntp server ntp.int.demo.wsr
+```
 
 ## WEB-L-XX NTP
 
+```debian
 apt-cdrom add
-
 apt install -y chrony 
+```
 
+```debian
 nano /etc/chrony/chrony.conf
+```
 
+```debian
 pool ntp.int.demo.wsr iburst
-
 allow 192.168.100.0/24
+```
 
+![image](https://user-images.githubusercontent.com/79700810/149901162-a912e3d2-fc90-453b-ace0-347e58621ede.png)
+
+```debian
 systemctl restart chrony
-## RTR-R-XX NTP
-
-ip domain name int.demo.wsr
-ip name-server 192.168.100.200
-
-ntp server ntp.int.demo.wsr
+```
 
 ## WEB-R-XX NTP
 
+```debian
 apt-cdrom add
-
 apt install -y chrony 
+```
 
+```debian
 nano /etc/chrony/chrony.conf
+```
 
+```debian
 pool ntp.int.demo.wsr iburst
-
 allow 192.168.100.0/24
+```
 
+![image](https://user-images.githubusercontent.com/79700810/149901302-79e89cb0-27da-44ce-9ac7-9ae2e74bb985.png)
+
+
+```debian
 systemctl restart chrony
-
+```
 
 ## SRV RAID
 
-get-disk
 
+```powershell
+get-disk
 set-disk -Number 1 -IsOffline $false
 set-disk -Number 2 -IsOffline $false
+```
 
+```powershell
 New-StoragePool -FriendlyName "POOLRAID1" -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks (Get-PhysicalDisk -CanPool $true)
+```
 
+```powershell
 New-VirtualDisk -StoragePoolFriendlyName "POOLRAID1" -FriendlyName "RAID1" -ResiliencySettingName Mirror -UseMaximumSize
+```
 
+```powershell
 Initialize-Disk -FriendlyName "RAID1"
+```
 
+```powershell
 New-Partition -DiskNumber 3 -UseMaximumSize -DriveLetter R
+```
 
+```powershell
 Format-Volume -DriveLetter R
+```
 
 ## SRV NFS
 
+```powershell
 Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools
-
 Install-WindowsFeature -Name FS-NFS-Service -IncludeManagementTools
+```
 
+```powershell
 New-Item -Path R:\storage -ItemType Directory
+```
 
-
+```powershell
 New-NfsShare -Path "R:\shares" -Name nfs -Permission Readwrite
-
+```
 
 
 
 ## WEB-L-XX nfs
 
+```debian
 apt-cdrom add
 apt -y install nfs-common
+```
 
+```debian
 nano /etc/fstab
+```
 
-    #<file system>
-    srv-xx.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
+```debian
+    srv.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
+```
 
+![image](https://user-images.githubusercontent.com/79700810/149901746-0fae3e70-f081-4a2d-9bd5-1f5eb8242d3d.png)
+
+```debian
 mkdir /opt/share
 mount -a
-
+```
 
 ## WEB-R-XX nfs
 
+```debian
 apt-cdrom add
 apt -y install nfs-common
+```
 
+```debian
 nano /etc/fstab
+```
 
+```debian
     #<file system>
-    srv-xx.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
+    srv.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
+```
 
+![image](https://user-images.githubusercontent.com/79700810/149901934-589f0f54-fd23-4e83-868d-7dee2348cec6.png)
+
+```debian
 mkdir /opt/share
 mount -a
-
+```
 
 ## SRV-XX ADCS
 
+```powershell
 Install-WindowsFeature -Name AD-Certificate, ADCS-Web-Enrollment -IncludeManagementTools
+```
 
+```powershell
 Install-AdcsCertificationAuthority -CAType StandaloneRootCa -CACommonName "Demo.wsr" -force
+```
 
+```powershell
 Install-AdcsWebEnrollment -Confirm -force
+```
 
 ## Инфраструктура веб-приложения.
 
 ## WEB-L-XX Doc
 
+```debian
 apt-cdrom add
+```
 
+```debian
 apt install -y docker-ce
 systemctl start docker
 systemctl enable docker
+```
 
-
+```debian
 mkdir /mnt/app
+```
 
+```debian
 mount /dev/sr1 /mnt/app
+```
 
+```debian
 docker load < /mnt/app/app.tar
+```
 
+```debian
 docker images
 docker run --name app  -p 8080:80 -d app
 docker ps
+```
+
 ## WEB-R-XX Doc
 
+```debian
 apt-cdrom add
+```
 
+```debian
 apt install -y docker-ce
 systemctl start docker
 systemctl enable docker
+```
 
-
+```debian
 mkdir /mnt/app
+```
 
+```debian
 mount /dev/sr1 /mnt/app
-
+```
+```debian
 docker load < /mnt/app/app.tar
+```
 
+```debian
 docker images
 docker run --name app  -p 8080:80 -d app
 docker ps
+```
 
 ## RTR-L-XX
 
+```cisco
 no ip http secure-server
 wr
 reload
+```
 
+```cisco
 ip nat inside source static tcp 192.168.100.100 80 4.4.4.100 80 
 ip nat inside source static tcp 192.168.100.100 443 4.4.4.100 443 
+```
 
 ## RTR-R-XX
-
+```cisco
 no ip http secure-server
 wr
 reload
+```
 
+```cisco
 ip nat inside source static tcp 172.16.100.100 80 5.5.5.100 80 
 ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443 
-
+```
 ## SRV ssl
 
 ![image](https://user-images.githubusercontent.com/79700810/149763282-2b6d46b0-836a-450d-84ba-8f25bc488157.png)
@@ -669,18 +846,25 @@ ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443
 ## WEB-L-XX ssl
 
 
-
+```debian
 cd /opt/share
+```
 
+```debian
 openssl pkcs12 -nodes -nocerts -in www.pfx -out www.key
 
 openssl pkcs12 -nodes -nokeys -in www.pfx -out www.cer
+```
 
-cp /opt/share /etc/nginx/www.key
+```debian
+cp /opt/share/www.key /etc/nginx/www.key
 
-cp /opt/share /etc/nginx/www.cer
+cp /opt/share/www.cer /etc/nginx/www.cer
+```
+
 
 ![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
+
 
 /etc/nginx/sites-enabled/default
 
