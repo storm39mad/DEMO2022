@@ -55,7 +55,7 @@ do wr
 
 ![image](https://user-images.githubusercontent.com/79700810/149130676-f87df5f2-ff68-42f9-9ad6-12397ffa7da1.png)
 
-## RTR-R
+#### RTR-R
 
 ```cisco
 en
@@ -65,7 +65,7 @@ do wr
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149131854-405305c4-0836-45f3-84d2-216de66648bb.png)
 
-## SRV
+#### SRV
 
 ```powershell
 Rename-Computer -NewName SRV
@@ -73,7 +73,7 @@ Rename-Computer -NewName SRV
 
 ![image](https://user-images.githubusercontent.com/79700810/149132196-2d6adb20-5d45-4b81-bb11-c7f2a9e4091a.png)
 
-## WEB-L
+#### WEB-L
 
 ```debian
 hostnamectl set-hostname WEB-L
@@ -81,7 +81,7 @@ hostnamectl set-hostname WEB-L
 
 ![image](https://user-images.githubusercontent.com/79700810/149132399-17daa67d-9e3a-4ed9-ac7f-a16ceb841839.png)
 
-## WEB-R
+#### WEB-R
 
 ```debian
 hostnamectl set-hostname WEB-R
@@ -89,7 +89,7 @@ hostnamectl set-hostname WEB-R
 
 ![image](https://user-images.githubusercontent.com/79700810/149132565-36c043eb-5a6f-48a1-89e4-2d98929a2af6.png)
 
-## ISP
+#### ISP
 
 ```debian
 hostnamectl set-hostname ISP
@@ -97,7 +97,7 @@ hostnamectl set-hostname ISP
 
 ![image](https://user-images.githubusercontent.com/79700810/149132932-73fa60e9-37ce-448c-8a7b-a1176f9ac814.png)
 
-## CLI
+#### CLI
 
 ```powershell
 Rename-Computer -NewName CLI
@@ -106,8 +106,8 @@ Rename-Computer -NewName CLI
 ![image](https://user-images.githubusercontent.com/79700810/149140416-38cb1f3d-5be7-461d-a833-c1301d4e06a8.png)
 
 
-## Адресация должна быть выполнена в соответствии с Таблицей 1;
-## RTR-L
+### Адресация должна быть выполнена в соответствии с Таблицей 1;
+#### RTR-L
 ```cisco
 int gi 1
 ip address 4.4.4.100 255.255.255.0
@@ -124,7 +124,7 @@ wr
 
 ![image](https://user-images.githubusercontent.com/79700810/149131532-441bf23b-1cc1-443a-90e5-6fd6863248bb.png)
 
-## RTR-R
+#### RTR-R
 
 ```cisco
 int gi 1
@@ -141,7 +141,7 @@ wr
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149136014-1b7f6173-e5c7-404e-ac77-120f11947809.png)
 
-## SRV
+#### SRV
 
 ```powershell
 $GetIndex = Get-NetAdapter
@@ -154,7 +154,7 @@ Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True -Prof
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149136645-da7a2f8c-a223-4961-aeb6-a4276bbe4b6d.png)
 
-## WEB-L
+#### WEB-L
 
 ```debian
 apt-cdrom add
@@ -168,7 +168,7 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 
 ![image](https://user-images.githubusercontent.com/79700810/149137520-04fb65d6-ac34-4e2f-a4d8-f6eed3011574.png)
 
-## WEB-R
+#### WEB-R
 
 ```debian
 apt-cdrom add
@@ -182,7 +182,7 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 
 ![image](https://user-images.githubusercontent.com/79700810/149138018-65de91c7-6431-45fe-884b-a7edf32201df.png)
 
-## ISP
+#### ISP
 
 ```debian
 apt-cdrom add
@@ -202,7 +202,7 @@ nmcli connection modify Wired\ connection\ 3 conn.autoconnect yes conn.interface
 ![image](https://user-images.githubusercontent.com/79700810/149140670-2d614562-4038-4103-ad34-49044058eff0.png)
 
 
-## CLI
+#### CLI
 
 ```powershell
 $GetIndex = Get-NetAdapter
@@ -212,12 +212,12 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 
 ![image](https://user-images.githubusercontent.com/79700810/149141167-2233dd9d-3bb8-46eb-b00e-2c8aae2b09a5.png)
 
-## Сетевая связность.
+### Сетевая связность.
 В рамках данного модуля требуется обеспечить сетевую связность между
 регионами работы приложения, а также обеспечить выход ВМ в имитируемую
 сеть “Интернет”. 
 
-## ISP forward
+#### ISP forward
 
 ```debian
 nano /etc/sysctl.conf
@@ -230,19 +230,19 @@ nano /etc/sysctl.conf
 ![image](https://user-images.githubusercontent.com/79700810/149896195-71778f11-2e69-4750-b6a0-9424d4dc8890.png)
 
 
-## RTR-L Gitw
+#### RTR-L Gitw
 
 ```cisco
 ip route 0.0.0.0 0.0.0.0 4.4.4.1
 ```
 
-## RTR-R gitw
+#### RTR-R gitw
 
 ```cisco
 ip route 0.0.0.0 0.0.0.0 5.5.5.1
 ```
 
-## RTR-L GRE
+#### RTR-L GRE
 
 ```cisco
 interface Tunne 1
@@ -258,7 +258,7 @@ network 192.168.100.0 0.0.0.255
 network 172.16.1.0 0.0.0.255
 ```
 
-## RTR-R
+#### RTR-R
 
 ```cisco
 interface Tunne 1
@@ -274,11 +274,10 @@ network 172.16.100.0 0.0.0.255
 network 172.16.1.0 0.0.0.255
 ```
 
-## NAT
+#### RTR-L NAT
 на внутр. интерфейсе - ip nat inside
-на внешн. интерфейсе - ip nat outside
 
-## RTR-L NAT
+на внешн. интерфейсе - ip nat outside
 
 ```cisco
 int gi 1
@@ -291,7 +290,7 @@ access-list 1 permit 192.168.100.0 0.0.0.255
 ip nat inside source list 1 interface Gi1 overload
 ```
 
-## RTR-R NAT
+#### RTR-R NAT
 
 ```cisco
 int gi 1
@@ -304,7 +303,7 @@ access-list 1 permit 172.16.100.0 0.0.0.255
 ip nat inside source list 1 interface Gi1 overload
 ```
 
-## RTR-L
+#### RTR-L
 
 ```cisco
 crypto isakmp policy 1
@@ -329,7 +328,7 @@ tunnel mode ipsec ipv4
 tunnel protection ipsec profile VTI
 ```
 
-## RTR-R
+#### RTR-R
 
 ```cisco
 conf t
@@ -357,7 +356,7 @@ tunnel protection ipsec profile VTI
 ```
 
 
-## SSH RTR-L
+#### RTR-L SSH
 
 ```cisco
 ip nat inside source static tcp 192.168.100.100 22 4.4.4.100 2222
@@ -367,13 +366,13 @@ ip nat inside source static tcp 192.168.100.100 22 4.4.4.100 2222
 
 
 
-## SSH RTR-R-XX
+#### SSH RTR-R
 
 ```cisco
 ip nat inside source static tcp 172.16.100.100 22 5.5.5.100 2244
 ```
 
-## SSH WEB-L-XX
+#### SSH WEB-L
 
 ```debian
 apt-cdrom add
@@ -385,7 +384,7 @@ systemctl start sshd
 systemctl enable ssh
 ```
 
-## SSH WEB-R-XX
+#### SSH WEB-R
 
 ```debian
 apt-cdrom add
@@ -397,12 +396,12 @@ systemctl start sshd
 systemctl enable ssh
 ```
 
-## Инфраструктурные службы
+### Инфраструктурные службы
 
 
 
 
-## ISP
+#### ISP
 
 |Zone            |Type                |Key             |Meaning         |
 |  ------------- | -------------      | -------------  |  ------------- |
@@ -484,7 +483,7 @@ rtr-l IN  A 4.4.4.100
 systemctl restatr bind9
 ```
 
-## RTR-L
+#### RTR-L
 
 ```debian
 ip nat inside source static tcp 192.168.100.200 53 4.4.4.100 53
@@ -493,7 +492,7 @@ ip nat inside source static udp 192.168.100.200 53 4.4.4.100 53
 ```
 
 
-## SRV
+#### SRV
 
 ```powershell
 Install-WindowsFeature -Name DNS -IncludeManagementTools
@@ -536,7 +535,7 @@ Add-DnsServerResourceRecordCName -Name "ntp" -HostNameAlias "srv.int.demo.wsr" -
 Add-DnsServerResourceRecordCName -Name "dns" -HostNameAlias "srv.int.demo.wsr" -ZoneName "int.demo.wsr"
 ```
 
-## ISP NTP
+#### ISP NTP
 
 ```debian
 apt install -y chrony 
@@ -557,7 +556,7 @@ allow 3.3.3.0/24
 systemctl restart chronyd 
 ```
 
-## SRV NTP
+#### SRV NTP
 
 
 ```powershell
@@ -571,7 +570,7 @@ w32tm /config /manualpeerlist:4.4.4.1 /syncfromflags:manual /reliable:yes /updat
 Restart-Service W32Time
 ```
 
-## CLI NTP
+#### CLI NTP
 
 ```powershell
 New-NetFirewallRule -DisplayName "NTP" -Direction Inbound -LocalPort 123 -Protocol UDP -Action Allow
@@ -586,7 +585,7 @@ Restart-Service W32Time
 
 ![image](https://user-images.githubusercontent.com/79700810/149523036-1db4eeca-ca6b-491a-9d19-d6c097a7ca80.png)
 
-## RTR-L NTP
+#### RTR-L NTP
 
 
 
@@ -599,7 +598,7 @@ ip name-server 192.168.100.200
 ntp server ntp.int.demo.wsr
 ```
 
-## RTR-R-XX NTP
+#### RTR-R NTP
 
 ```cisco
 ip domain name int.demo.wsr
@@ -610,7 +609,7 @@ ip name-server 192.168.100.200
 ntp server ntp.int.demo.wsr
 ```
 
-## WEB-L-XX NTP
+#### WEB-L NTP
 
 ```debian
 apt-cdrom add
@@ -632,7 +631,7 @@ allow 192.168.100.0/24
 systemctl restart chrony
 ```
 
-## WEB-R-XX NTP
+#### WEB-R NTP
 
 ```debian
 apt-cdrom add
@@ -655,7 +654,7 @@ allow 192.168.100.0/24
 systemctl restart chrony
 ```
 
-## SRV RAID1
+#### SRV RAID1
 
 
 ```powershell
@@ -684,7 +683,7 @@ New-Partition -DiskNumber 3 -UseMaximumSize -DriveLetter R
 Format-Volume -DriveLetter R
 ```
 
-## SRV NFS
+#### SRV NFS
 
 ```powershell
 Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools
@@ -701,7 +700,7 @@ New-NfsShare -Path "R:\shares" -Name nfs -Permission Readwrite
 
 
 
-## WEB-L-XX nfs
+#### WEB-L nfs
 
 ```debian
 apt-cdrom add
@@ -723,7 +722,7 @@ mkdir /opt/share
 mount -a
 ```
 
-## WEB-R-XX nfs
+#### WEB-R nfs
 
 ```debian
 apt-cdrom add
@@ -746,7 +745,7 @@ mkdir /opt/share
 mount -a
 ```
 
-## SRV-XX ADCS
+#### SRV ADCS
 
 ```powershell
 Install-WindowsFeature -Name AD-Certificate, ADCS-Web-Enrollment -IncludeManagementTools
@@ -769,9 +768,9 @@ Install-AdcsWebEnrollment -Confirm -force
 ![image](https://user-images.githubusercontent.com/79700810/149936259-13306942-38d5-4c15-850c-2bf5845968c9.png)
 
 
-## Инфраструктура веб-приложения.
+### Инфраструктура веб-приложения.
 
-## WEB-L-XX Doc
+#### WEB-L-XX Doc
 
 ```debian
 apt-cdrom add
@@ -801,7 +800,7 @@ docker run --name app  -p 8080:80 -d app
 docker ps
 ```
 
-## WEB-R-XX Doc
+#### WEB-R Doc
 
 ```debian
 apt-cdrom add
@@ -830,7 +829,7 @@ docker run --name app  -p 8080:80 -d app
 docker ps
 ```
 
-## RTR-L-XX
+#### RTR-L
 
 ```cisco
 no ip http secure-server
@@ -843,7 +842,7 @@ ip nat inside source static tcp 192.168.100.100 80 4.4.4.100 80
 ip nat inside source static tcp 192.168.100.100 443 4.4.4.100 443 
 ```
 
-## RTR-R-XX
+#### RTR-R
 ```cisco
 no ip http secure-server
 wr
@@ -854,7 +853,7 @@ reload
 ip nat inside source static tcp 172.16.100.100 80 5.5.5.100 80 
 ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443 
 ```
-## SRV ssl
+#### SRV ssl
 
 ![image](https://user-images.githubusercontent.com/79700810/149763282-2b6d46b0-836a-450d-84ba-8f25bc488157.png)
 
@@ -884,7 +883,7 @@ ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443
 
 
 
-## WEB-L-XX ssl
+#### WEB-L ssl
 ```debian
 apt install -y nginx
 ```
@@ -919,7 +918,7 @@ nano /etc/nginx/sites-enabled/default
 ```debian
 systemctl reload nginx
 ```
-## WEB-R-XX ssl
+#### WEB-R ssl
 
 ```debian
 apt install -y nginx
@@ -955,7 +954,7 @@ nano /etc/nginx/sites-enabled/default
 systemctl reload nginx
 ```
 
-## WEB-R-XX ssl
+#### WEB-R ssl
 ssh 
 
 ```debian
@@ -969,7 +968,7 @@ systemctl restart sshd
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149774186-c83b7b0a-5f67-41bb-9051-b26897840154.png)
 
-## CLI-xx ssl
+#### CLI ssl
 
 ```powershell
 scp -P 2244 'root@5.5.5.100:/opt/share/ca.cer' C:\Users\Admin\Desktop\
@@ -978,7 +977,7 @@ scp -P 2244 'root@5.5.5.100:/opt/share/ca.cer' C:\Users\Admin\Desktop\
 ![image](https://user-images.githubusercontent.com/79700810/149774248-784bebe3-8015-414f-88dc-e96f91dfd395.png)\
 
 
-## rtr-l-xx ACL
+#### RTR-L ACL
 
 ```cisco
 ip access-list extended Lnew
@@ -1004,7 +1003,7 @@ int gi 1
 ip access-group Lnew in
 ```
 
-## rtr-r-xx ACL
+#### RTR-R ACL
 ```cisco
 ip access-list extended Rnew
 ```
