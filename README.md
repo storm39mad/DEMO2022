@@ -756,6 +756,11 @@ Install-AdcsWebEnrollment -Confirm -force
 
 ![image](https://user-images.githubusercontent.com/79700810/149932532-f74cd1e8-bfa0-4904-8f5a-e1e7c1abedef.png)
 
+![image](https://user-images.githubusercontent.com/79700810/149936233-d2a22bf8-037c-4a82-a1f9-a72b24c3843f.png)
+
+![image](https://user-images.githubusercontent.com/79700810/149936259-13306942-38d5-4c15-850c-2bf5845968c9.png)
+
+
 ## Инфраструктура веб-приложения.
 
 ## WEB-L-XX Doc
