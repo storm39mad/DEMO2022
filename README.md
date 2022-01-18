@@ -253,8 +253,8 @@ tunnel destination 5.5.5.100
 
 ```cisco
 router eigrp 6500
-network 192.168.0.0 0.0.255.255
-network 172.16.0.0 0.0.0.255
+network 192.168.100.0 0.0.0.255
+network 172.16.1.0 0.0.0.255
 ```
 
 ## RTR-R
@@ -269,8 +269,8 @@ tunnel destination 4.4.4.100
 
 ```cisco
 router eigrp 6500
-network 192.168.0.0 0.0.255.255
-network 172.16.0.0 0.0.0.255
+network 172.16.100.0 0.0.0.255
+network 172.16.1.0 0.0.0.255
 ```
 
 ## NAT
