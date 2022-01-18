@@ -229,11 +229,6 @@ nano /etc/sysctl.conf
 
 ![image](https://user-images.githubusercontent.com/79700810/149896195-71778f11-2e69-4750-b6a0-9424d4dc8890.png)
 
-```debian
-   nano /etc/bind/named.conf.options
-```
-
-![image](https://user-images.githubusercontent.com/79700810/149960943-5fd4702e-a060-4425-ac6b-14cca42e02bf.png)
 
 ## RTR-L Gitw
 
@@ -442,6 +437,12 @@ nano /etc/apparmor.d/usr.sbin.named
 ```debian
 systemctl restart apparmor.service
 ```
+```debian
+   nano /etc/bind/named.conf.options
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149960943-5fd4702e-a060-4425-ac6b-14cca42e02bf.png)
+
 
 ```debian
 nano /etc/bind/named.conf.default-zones
