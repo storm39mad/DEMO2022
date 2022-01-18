@@ -970,9 +970,12 @@ ip access-list extended Lnew
 permit tcp any any established
 permit udp host 4.4.4.100 eq 53 any
 permit udp host 5.5.5.1 eq 123 any
-permit tcp host 4.4.4.100 eq 80 any
-permit tcp host 4.4.4.100 eq 443 any
-permit tcp host 4.4.4.100 eq 2222 any
+permit tcp any host 4.4.4.100 eq 80 
+permit tcp any host 4.4.4.100 eq 443 
+permit tcp any host 4.4.4.100 eq 2222 
+```
+
+```cisco
 permit udp host 5.5.5.100 host 4.4.4.100 eq 500
 permit esp any any
 permit icmp any any
@@ -990,10 +993,13 @@ ip access-list extended Rnew
 
 ```cisco
 permit tcp any any established
-permit tcp host 5.5.5.100 eq 80 any
-permit tcp host 5.5.5.100 eq 443 any
-permit tcp host 5.5.5.100 eq 2244 any
+permit tcp any host 5.5.5.100 eq 80 
+permit tcp any host 5.5.5.100 eq 443 
+permit tcp any host 5.5.5.100 eq 2244 
 permit udp host 4.4.4.100 host 5.5.5.100 eq 500
+```
+
+```cisco
 permit esp any any
 permit icmp any any
 ```
