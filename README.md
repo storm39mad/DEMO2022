@@ -8,7 +8,7 @@
 ## Модуль 1
 Вариант 1-0 (публичный)
 
-![Untitled Diagram-Page-9 drawio (1)](https://user-images.githubusercontent.com/79700810/149122755-73e58784-a1f7-4df9-b685-d81e473f26a3.png)
+![image](https://user-images.githubusercontent.com/79700810/149956179-026c9bba-e6fc-495a-81df-4c6ddb0ec1d6.png)
 
 ## Виртуальные машины и коммутация.
 Необходимо выполнить создание и базовую конфигурацию виртуальных
