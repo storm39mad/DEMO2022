@@ -112,7 +112,9 @@ Rename-Computer -NewName CLI
 int gi 1
 ip address 4.4.4.100 255.255.255.0
 no sh
+```
 
+```cisco
 int gi 2
 ip address 192.168.100.254 255.255.255.0
 no sh
@@ -128,6 +130,9 @@ wr
 int gi 1
 ip address 5.5.5.100 255.255.255.0
 no sh
+```
+
+```cisco
 int gi 2
 ip address 172.16.100.254 255.255.255.0
 no sh
@@ -154,9 +159,13 @@ Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True -Prof
 ```debian
 apt-cdrom add
 apt install -y network-manager
+```
+
+```debian
 nmcli connection show
 nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '192.168.100.100/24' ipv4.dns 192.168.100.200 ipv4.gateway 192.168.100.254
 ```
+
 ![image](https://user-images.githubusercontent.com/79700810/149137520-04fb65d6-ac34-4e2f-a4d8-f6eed3011574.png)
 
 ## WEB-R
@@ -164,6 +173,9 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 ```debian
 apt-cdrom add
 apt install -y network-manager
+```
+
+```debian
 nmcli connection show
 nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '172.16.100/24' ipv4.dns 192.168.100.200 ipv4.gateway 172.16.100.254
 ```
@@ -175,7 +187,13 @@ nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface
 ```debian
 apt-cdrom add
 apt install -y network-manager bind9 chrony 
+```
+
+```debian
 nmcli connection show
+```
+
+```debian
 nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '3.3.3.1/24'
 nmcli connection modify Wired\ connection\ 2 conn.autoconnect yes conn.interface-name ens224 ipv4.method manual ipv4.addresses '4.4.4.1/24'
 nmcli connection modify Wired\ connection\ 3 conn.autoconnect yes conn.interface-name ens256 ipv4.method manual ipv4.addresses '5.5.5.1/24'
@@ -359,6 +377,9 @@ ip nat inside source static tcp 172.16.100.100 22 5.5.5.100 2244
 ```debian
 apt-cdrom add
 apt install -y openssh-server ssh
+```
+
+```debian
 systemctl start sshd
 systemctl enable ssh
 ```
@@ -400,6 +421,9 @@ apt install -y bind9
 mkdir /opt/dns
 cp /etc/bind/db.local /opt/dns/demo.db
 chown -R bind:bind /opt/dns
+```
+
+```debian
 nano /etc/apparmor.d/usr.sbin.named
 ```
 
@@ -862,50 +886,73 @@ cp /opt/share/www.key /etc/nginx/www.key
 cp /opt/share/www.cer /etc/nginx/www.cer
 ```
 
+```debian
+nano /etc/nginx/snippets/snakeoil.conf
+```
 
 ![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
 
-
-/etc/nginx/sites-enabled/default
+```debian
+nano /etc/nginx/sites-enabled/default
+```
 
 ![image](https://user-images.githubusercontent.com/79700810/149767856-4de23e3a-cf68-4b51-9949-9aa22642644b.png)
 
-
+```debian
 systemctl reload nginx
-
+```
 ## WEB-R-XX ssl
 
+```debian
 cd /opt/share
+```
 
+```debian
 openssl pkcs12 -nodes -nocerts -in www.pfx -out www.key
 
 openssl pkcs12 -nodes -nokeys -in www.pfx -out www.cer
+```
 
-cp /opt/share /etc/nginx/www.key
+```debian
+cp /opt/share/www.key /etc/nginx/www.key
+cp /opt/share/www.cer /etc/nginx/www.cer
+```
 
-cp /opt/share /etc/nginx/www.cer
-
+```debian
+nano /etc/nginx/snippets/snakeoil.conf
+```
 ![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
 
-/etc/nginx/sites-enabled/default
+```debian
+nano /etc/nginx/sites-enabled/default
+```
 
 ![image](https://user-images.githubusercontent.com/79700810/149767856-4de23e3a-cf68-4b51-9949-9aa22642644b.png)
 
-
+```debian
 systemctl reload nginx
-
-## SRV ssl
+```
 
 ## WEB-R-XX ssl
 ssh 
 
+```debian
+nano /etc/ssh/sshd_config
+```
+
 ![image](https://user-images.githubusercontent.com/79700810/149774137-4c65faa7-a467-4b2f-a2ce-c1f6616f0c54.png)
 
+```debian
+systemctl restart sshd
+```
 ![image](https://user-images.githubusercontent.com/79700810/149774186-c83b7b0a-5f67-41bb-9051-b26897840154.png)
 
 ## CLI-xx ssl
 
+```powershell
 scp -P 2244 'root@5.5.5.100:/opt/share/ca.cer' C:\Users\Admin\Desktop\
+```
+
 ![image](https://user-images.githubusercontent.com/79700810/149774248-784bebe3-8015-414f-88dc-e96f91dfd395.png)\
 
 
