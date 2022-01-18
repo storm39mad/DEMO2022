@@ -229,6 +229,12 @@ nano /etc/sysctl.conf
 
 ![image](https://user-images.githubusercontent.com/79700810/149896195-71778f11-2e69-4750-b6a0-9424d4dc8890.png)
 
+```debian
+   nano /etc/bind/named.conf.options
+```
+
+![image](https://user-images.githubusercontent.com/79700810/149960943-5fd4702e-a060-4425-ac6b-14cca42e02bf.png)
+
 ## RTR-L Gitw
 
 ```cisco
@@ -470,6 +476,7 @@ rtr-l IN  A 4.4.4.100
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149897156-6b854933-a735-4813-bdf3-a9ea9944e16e.png)
+
 
 
 ```debian
