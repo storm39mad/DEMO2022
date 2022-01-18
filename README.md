@@ -958,37 +958,45 @@ scp -P 2244 'root@5.5.5.100:/opt/share/ca.cer' C:\Users\Admin\Desktop\
 
 ## rtr-l-xx ACL
 
-ip access-list extended L
-permit tcp any any eq 53
-permit udp any any eq 53
-permit tcp any any eq 80
-permit tcp any any eq 443
-permit tcp any any eq echo
-permit tcp any any eq 2222
-permit icmp any any
-permit esp any any
-permit udp host 5.5.5.100 host 4.4.4.100 eq 4500
-permit udp host 5.5.5.100 host 4.4.4.100 eq 500
+```cisco
+ip access-list extended Lnew
+```
 
-int gi 1
-ip access-group L in
+```cisco
+permit tcp any any established
+permit udp host 4.4.4.100 eq 53 any
+permit udp host 5.5.5.1 eq 123 any
+permit tcp host 4.4.4.100 eq 80 any
+permit tcp host 4.4.4.100 eq 443 any
+permit tcp host 4.4.4.100 eq 2222 any
+permit udp host 5.5.5.100 host 4.4.4.100 eq 500
+permit esp any any
+permit icmp any any
+```
+
+```cisco
+int gi 1 
+ip access-group Lnew in
+```
 
 ## rtr-r-xx ACL
+```cisco
+ip access-list extended Rnew
+```
 
-ip access-list extended R
-permit tcp any any eq 53
-permit udp any any eq 53
-permit tcp any any eq 80
-permit tcp any any eq 443
-permit tcp any any eq echo
-permit tcp any any eq 2244
-permit icmp any any
+```cisco
+permit tcp any any established
+permit tcp host 5.5.5.100 eq 80 any
+permit tcp host 5.5.5.100 eq 443 any
+permit tcp host 5.5.5.100 eq 2244 any
+permit udp host 4.4.4.100 host 5.5.5.100 eq 500
 permit esp any any
-permit udp host 4.4.4.100 host 5.5.5.100 eq 4500
-permit udp host 5.5.5.100 host 4.4.4.100 eq 500
+permit icmp any any
+```
 
-int gi 1
-ip access-group R in
-
+```cisco
+int gi 1 
+ip access-group Rnew in
+```
 
 
