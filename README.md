@@ -752,6 +752,10 @@ Install-AdcsCertificationAuthority -CAType StandaloneRootCa -CACommonName "Demo.
 Install-AdcsWebEnrollment -Confirm -force
 ```
 
+![image](https://user-images.githubusercontent.com/79700810/149932456-5e3bd0f3-df88-411d-a641-a4dd359939c4.png)
+
+![image](https://user-images.githubusercontent.com/79700810/149932532-f74cd1e8-bfa0-4904-8f5a-e1e7c1abedef.png)
+
 ## Инфраструктура веб-приложения.
 
 ## WEB-L-XX Doc
