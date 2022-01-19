@@ -1255,5 +1255,6 @@ scp -P 2244 'root@5.5.5.100:/opt/share/ca.cer' C:\Users\Admin\Desktop\
 
 ![image](https://user-images.githubusercontent.com/79700810/149774248-784bebe3-8015-414f-88dc-e96f91dfd395.png)\
 
+![image](https://user-images.githubusercontent.com/79700810/150135023-996d369c-493e-47c7-b826-6186cc0bf914.png)
 
 
