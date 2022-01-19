@@ -582,7 +582,9 @@ w32tm /config /manualpeerlist:4.4.4.1 /syncfromflags:manual /reliable:yes /updat
 Restart-Service W32Time
 ```
 
-
+```powershell
+Set-Service -Name W32Time -StartupType Automatic
+```
 ![image](https://user-images.githubusercontent.com/79700810/149523036-1db4eeca-ca6b-491a-9d19-d6c097a7ca80.png)
 
 #### RTR-L NTP
