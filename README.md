@@ -14,8 +14,6 @@
 Необходимо выполнить создание и базовую конфигурацию виртуальных
 машин.
 
-
-
 1. На основе предоставленных ВМ или шаблонов ВМ создайте отсутствующие виртуальные машины в соответствии со схемой.  
    -	Характеристики ВМ установите в соответствии с Таблицей 1;
    -	Коммутацию (если таковая не выполнена) выполните в соответствии со схемой сети.	 
@@ -41,6 +39,7 @@
 
 
 ### 1. На основе предоставленных ВМ или шаблонов ВМ создайте отсутствующие виртуальные машины в соответствии со схемой.
+
 
 ### 2.  Имена хостов в созданных ВМ должны быть установлены в соответствии со схемой.
 
@@ -240,7 +239,6 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
     - Разрешается работа протокола SSH;
     - Прочие подключения запрещены;
     - Для обращений в платформам со стороны хостов, находящихся внутри регионов, ограничений быть не должно;
-
 5. Платформа управления трафиком RTR-R выполняет контроль входящего трафика согласно следующим правилам:
    - Разрешаются подключения к портам HTTP и HTTPS для всех клиентов;
      - Порты необходимо для работы настраиваемых служб
@@ -253,6 +251,8 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 6. Обеспечьте настройку служб SSH региона Left:
    - Подключения со стороны внешних сетей по протоколу к платформе управления трафиком RTR-L на порт 2222 должны быть перенаправлены на ВМ Web-L;
    - Подключения со стороны внешних сетей по протоколу к платформе управления трафиком RTR-L на порт 2244 должны быть перенаправлены на ВМ Web-R;
+
+### 1. Сети, подключенные к ISP, считаются внешними:
 #### ISP forward
 
 ```debian
@@ -278,6 +278,38 @@ ip route 0.0.0.0 0.0.0.0 4.4.4.1
 ip route 0.0.0.0 0.0.0.0 5.5.5.1
 ```
 
+### 2. Платформы контроля трафика, установленные на границах регионов, должны выполнять трансляцию трафика, идущего из соответствующих внутренних сетей во внешние сети стенда и в сеть Интернет.
+
+#### RTR-L NAT
+на внутр. интерфейсе - ip nat inside
+
+на внешн. интерфейсе - ip nat outside
+
+```cisco
+int gi 1
+ip nat outside
+!
+int gi 2
+ip nat inside
+!
+access-list 1 permit 192.168.100.0 0.0.0.255
+ip nat inside source list 1 interface Gi1 overload
+```
+
+#### RTR-R NAT
+
+```cisco
+int gi 1
+ip nat outside
+!
+int gi 2
+ip nat inside
+!
+access-list 1 permit 172.16.100.0 0.0.0.255
+ip nat inside source list 1 interface Gi1 overload
+```
+
+### 3. Между платформами должен быть установлен защищенный туннель, позволяющий осуществлять связь между регионами с применением внутренних адресов.
 #### RTR-L GRE
 
 ```cisco
@@ -310,34 +342,6 @@ network 172.16.100.0 0.0.0.255
 network 172.16.1.0 0.0.0.255
 ```
 
-#### RTR-L NAT
-на внутр. интерфейсе - ip nat inside
-
-на внешн. интерфейсе - ip nat outside
-
-```cisco
-int gi 1
-ip nat outside
-!
-int gi 2
-ip nat inside
-!
-access-list 1 permit 192.168.100.0 0.0.0.255
-ip nat inside source list 1 interface Gi1 overload
-```
-
-#### RTR-R NAT
-
-```cisco
-int gi 1
-ip nat outside
-!
-int gi 2
-ip nat inside
-!
-access-list 1 permit 172.16.100.0 0.0.0.255
-ip nat inside source list 1 interface Gi1 overload
-```
 
 #### RTR-L
 
@@ -390,8 +394,62 @@ interface Tunnel1
 tunnel mode ipsec ipv4
 tunnel protection ipsec profile VTI
 ```
+###  4. Платформа управления трафиком RTR-L выполняет контроль входящего трафика согласно следующим правилам:
+
+#### RTR-L ACL
+
+```cisco
+ip access-list extended Lnew
+```
+
+```cisco
+permit tcp any any established
+permit udp host 4.4.4.100 eq 53 any
+permit udp host 5.5.5.1 eq 123 any
+permit tcp any host 4.4.4.100 eq 80 
+permit tcp any host 4.4.4.100 eq 443 
+permit tcp any host 4.4.4.100 eq 2222 
+```
+
+```cisco
+permit udp host 5.5.5.100 host 4.4.4.100 eq 500
+permit esp any any
+permit icmp any any
+```
+
+```cisco
+int gi 1 
+ip access-group Lnew in
+```
 
 
+
+### 5. Платформа управления трафиком RTR-R выполняет контроль входящего трафика согласно следующим правилам:
+
+#### RTR-R ACL
+```cisco
+ip access-list extended Rnew
+```
+
+```cisco
+permit tcp any any established
+permit tcp any host 5.5.5.100 eq 80 
+permit tcp any host 5.5.5.100 eq 443 
+permit tcp any host 5.5.5.100 eq 2244 
+permit udp host 4.4.4.100 host 5.5.5.100 eq 500
+```
+
+```cisco
+permit esp any any
+permit icmp any any
+```
+
+```cisco
+int gi 1 
+ip access-group Rnew in
+```
+
+### 6. Обеспечьте настройку служб SSH региона Left:
 #### RTR-L SSH
 
 ```cisco
@@ -575,11 +633,7 @@ rtr-l IN  A 4.4.4.100
 ```debian
 systemctl restatr bind9
 ```
-ыыыы
-    <ul>
-      <li>Внешний клиент CLI должен использовать DNS-службу, развернутую на ISP, по умолчанию
-    </ul>
-  
+
 
 ![image](https://user-images.githubusercontent.com/79700810/150113406-58fb6b8b-3f06-48e9-8d92-59cbea5d69d7.png)
 
@@ -1198,54 +1252,5 @@ scp -P 2244 'root@5.5.5.100:/opt/share/ca.cer' C:\Users\Admin\Desktop\
 
 ![image](https://user-images.githubusercontent.com/79700810/149774248-784bebe3-8015-414f-88dc-e96f91dfd395.png)\
 
-
-#### RTR-L ACL
-
-```cisco
-ip access-list extended Lnew
-```
-
-```cisco
-permit tcp any any established
-permit udp host 4.4.4.100 eq 53 any
-permit udp host 5.5.5.1 eq 123 any
-permit tcp any host 4.4.4.100 eq 80 
-permit tcp any host 4.4.4.100 eq 443 
-permit tcp any host 4.4.4.100 eq 2222 
-```
-
-```cisco
-permit udp host 5.5.5.100 host 4.4.4.100 eq 500
-permit esp any any
-permit icmp any any
-```
-
-```cisco
-int gi 1 
-ip access-group Lnew in
-```
-
-#### RTR-R ACL
-```cisco
-ip access-list extended Rnew
-```
-
-```cisco
-permit tcp any any established
-permit tcp any host 5.5.5.100 eq 80 
-permit tcp any host 5.5.5.100 eq 443 
-permit tcp any host 5.5.5.100 eq 2244 
-permit udp host 4.4.4.100 host 5.5.5.100 eq 500
-```
-
-```cisco
-permit esp any any
-permit icmp any any
-```
-
-```cisco
-int gi 1 
-ip access-group Rnew in
-```
 
 
