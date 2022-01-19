@@ -856,6 +856,21 @@ ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443
 ```
 #### SRV ssl
 
+```powershell
+New-SelfSignedCertificate -subject "localhost" 
+```
+
+```powershell
+Get-ChildItem cert:\LocalMachine\My
+```
+
+```powershell
+Move-item Cert:\LocalMachine\My\XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95 -destination Cert:\LocalMachine\Webhosting\
+```
+```powershell
+New-IISSiteBinding -Name 'Default Web Site' -BindingInformation "*:443:" -CertificateThumbPrint XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95
+```
+
 ![image](https://user-images.githubusercontent.com/79700810/149763282-2b6d46b0-836a-450d-84ba-8f25bc488157.png)
 
 ![image](https://user-images.githubusercontent.com/79700810/149763302-ed88dc08-9bd7-4a15-8a47-59bc5ee92649.png)
