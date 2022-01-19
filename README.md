@@ -903,6 +903,24 @@ Restart-Service CertSrv
 
 
 ## Инфраструктура веб-приложения.
+Данный блок подразумевает установку и настройку доступа к веб-приложению, выполненному в формате контейнера Docker
+1. Образ Docker (содержащий веб-приложение) расположен на ISO-образе дополнительных материалов;
+   - Выполните установку приложения AppDocker0;
+2. Пакеты для установки Docker расположены на дополнительном ISO-образе;
+3. Инструкция по работе с приложением расположена на дополнительном ISO-образе;
+4. Необходимо реализовать следующую инфраструктуру приложения.
+   - Клиентом приложения является CLI (браузер Edge);
+   - Хостинг приложения осуществляется на ВМ WEB-L и WEB-R;
+   - Доступ к приложению осуществляется по DNS-имени www.demo.wsr;
+     - Имя должно разрешаться во “внешние” адреса ВМ управления трафиком в обоих регионах;
+     - При необходимости, для доступа к к приложению допускается реализовать реверс-прокси или трансляцию портов;
+   - Доступ к приложению должен быть защищен с применением технологии TLS;
+     - Необходимо обеспечить корректное доверие сертификату сайта, без применения “исключений” и подобных механизмов;
+   - Незащищенное соединение должно переводится на защищенный канал автоматически;
+5. Необходимо обеспечить отказоустойчивость приложения;
+   - Сайт должен продолжать обслуживание (с задержкой не более 25 секунд) в следующих сценариях:
+     - Отказ одной из ВМ Web
+     - Отказ одной из ВМ управления трафиком. 
 
 #### WEB-L Doc
 
@@ -1046,10 +1064,35 @@ nano /etc/nginx/snippets/snakeoil.conf
 ![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
 
 ```debian
-nano /etc/nginx/sites-enabled/default
+nano /etc/nginx/sites-avalable/default
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149938053-50f5004e-198d-4b0a-93c0-b4d30cfb7774.png)
+```debian
+upstream backend { 
+ server 192.168.100.100:8080 fail_timeout=25; 
+ server 172.16.100.100:8080 fail_timeout=25; 
+} 
+ 
+server { 
+    listen 443 ssl default_server; 
+    include snippers/snakeoil.config;
+
+    server_name www.demo.wsr; 
+
+ location / { 
+  proxy_pass http://backend ;
+ } 
+}
+
+server { 
+   listen 80  default_server; 
+  server_name _; 
+  return 301 https://www.demo.wsr;
+
+}
+```
+
+![image](https://user-images.githubusercontent.com/79700810/150126455-0c42a808-bb14-4729-abd8-4f7b66db5554.png)
 
 ```debian
 systemctl reload nginx
@@ -1081,10 +1124,36 @@ nano /etc/nginx/snippets/snakeoil.conf
 ![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
 
 ```debian
-nano /etc/nginx/sites-enabled/default
+nano /etc/nginx/sites-avalable/default
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149938064-b9f8e289-a7f2-4bc9-ab2b-62ac472b6fbf.png)
+```debian
+upstream backend { 
+ server 192.168.100.100:8080 fail_timeout=25; 
+ server 172.16.100.100:8080 fail_timeout=25; 
+} 
+ 
+server { 
+    listen 443 ssl default_server; 
+    include snippers/snakeoil.config;
+
+    server_name www.demo.wsr; 
+
+ location / { 
+  proxy_pass http://backend ;
+ } 
+}
+
+server { 
+   listen 80  default_server; 
+  server_name _; 
+  return 301 https://www.demo.wsr;
+
+}
+```
+
+![image](https://user-images.githubusercontent.com/79700810/150126411-0bc0538e-3192-421a-a2f7-05901c3d0372.png)
+
 
 ```debian
 systemctl reload nginx
