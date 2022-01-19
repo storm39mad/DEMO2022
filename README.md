@@ -1064,7 +1064,7 @@ nano /etc/nginx/snippets/snakeoil.conf
 ![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
 
 ```debian
-nano /etc/nginx/sites-avalable/default
+nano /etc/nginx/sites-available/default
 ```
 
 ```debian
@@ -1124,7 +1124,7 @@ nano /etc/nginx/snippets/snakeoil.conf
 ![image](https://user-images.githubusercontent.com/79700810/149767553-c42bd433-0ebb-43dd-9256-abcd782c3e47.png)
 
 ```debian
-nano /etc/nginx/sites-avalable/default
+nano /etc/nginx/sites-available/default
 ```
 
 ```debian
