@@ -759,11 +759,44 @@ Install-AdcsCertificationAuthority -CAType StandaloneRootCa -CACommonName "Demo.
 Install-AdcsWebEnrollment -Confirm -force
 ```
 
+```powershell
+New-SelfSignedCertificate -subject "localhost" 
+```
+
+```powershell
+Get-ChildItem cert:\LocalMachine\My
+```
+
+```powershell
+Move-item Cert:\LocalMachine\My\XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95 -destination Cert:\LocalMachine\Webhosting\
+```
+```powershell
+New-IISSiteBinding -Name 'Default Web Site' -BindingInformation "*:443:" -Protocol htts -CertificateThumbPrint XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95 
+```
+
+```powershell
+Start-WebSite -Name "Default Web Site"
+```
 
 ![image](https://user-images.githubusercontent.com/79700810/149932456-5e3bd0f3-df88-411d-a641-a4dd359939c4.png)
 
 ![image](https://user-images.githubusercontent.com/79700810/149932532-f74cd1e8-bfa0-4904-8f5a-e1e7c1abedef.png)
 
+```powershell
+Get-CACrlDistributionPoint | Remove-CACrlDistributionPoint -force
+```
+
+```powershell
+Get-CAAuthorityInformationAccess |Remove-CAAuthorityInformationAccess -force
+```
+
+```powershell
+Get-CAAuthorityInformationAccess |Remove-CAAuthorityInformationAccess -force
+```
+
+```powershell
+Restart-Service CertSrv
+```
 ![image](https://user-images.githubusercontent.com/79700810/149936233-d2a22bf8-037c-4a82-a1f9-a72b24c3843f.png)
 
 ![image](https://user-images.githubusercontent.com/79700810/149936259-13306942-38d5-4c15-850c-2bf5845968c9.png)
@@ -856,20 +889,7 @@ ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443
 ```
 #### SRV ssl
 
-```powershell
-New-SelfSignedCertificate -subject "localhost" 
-```
 
-```powershell
-Get-ChildItem cert:\LocalMachine\My
-```
-
-```powershell
-Move-item Cert:\LocalMachine\My\XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95 -destination Cert:\LocalMachine\Webhosting\
-```
-```powershell
-New-IISSiteBinding -Name 'Default Web Site' -BindingInformation "*:443:" -CertificateThumbPrint XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95
-```
 
 ![image](https://user-images.githubusercontent.com/79700810/149763282-2b6d46b0-836a-450d-84ba-8f25bc488157.png)
 
