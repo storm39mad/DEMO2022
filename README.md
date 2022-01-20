@@ -630,8 +630,6 @@ systemctl restatr bind9
 ```
 
 
-![image](https://user-images.githubusercontent.com/79700810/150113406-58fb6b8b-3f06-48e9-8d92-59cbea5d69d7.png)
-
 #### RTR-L
 
 b. Маршрутизатор региона должен транслировать соответствующие порты DNS-службы в порты сервера SRV.
@@ -870,8 +868,6 @@ nano /etc/fstab
     srv.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149901746-0fae3e70-f081-4a2d-9bd5-1f5eb8242d3d.png)
-
 ```debian
 mkdir /opt/share
 mount -a
@@ -892,8 +888,6 @@ nano /etc/fstab
     #<file system>
     srv.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
 ```
-
-![image](https://user-images.githubusercontent.com/79700810/149901934-589f0f54-fd23-4e83-868d-7dee2348cec6.png)
 
 ```debian
 mkdir /opt/share
@@ -932,10 +926,6 @@ New-IISSiteBinding -Name 'Default Web Site' -BindingInformation "*:443:" -Protoc
 ```powershell
 Start-WebSite -Name "Default Web Site"
 ```
-
-![image](https://user-images.githubusercontent.com/79700810/149932456-5e3bd0f3-df88-411d-a641-a4dd359939c4.png)
-
-![image](https://user-images.githubusercontent.com/79700810/149932532-f74cd1e8-bfa0-4904-8f5a-e1e7c1abedef.png)
 
 ```powershell
 Get-CACrlDistributionPoint | Remove-CACrlDistributionPoint -force
@@ -1074,14 +1064,15 @@ ip nat inside source static tcp 172.16.100.100 443 5.5.5.100 443
 #### SRV ssl
 
 
+![image](https://user-images.githubusercontent.com/79700810/150323908-1e37041d-450f-477e-9f9f-24a5f1313e54.png)
 
-![image](https://user-images.githubusercontent.com/79700810/149763282-2b6d46b0-836a-450d-84ba-8f25bc488157.png)
+![image](https://user-images.githubusercontent.com/79700810/150323973-2b4fd9a8-d934-4a49-8e7d-98e02efd7826.png)
 
-![image](https://user-images.githubusercontent.com/79700810/149763302-ed88dc08-9bd7-4a15-8a47-59bc5ee92649.png)
+![image](https://user-images.githubusercontent.com/79700810/150324325-b67039dc-6d6a-4dd1-9ade-67bbcaa3a6db.png)
 
-![image](https://user-images.githubusercontent.com/79700810/149766791-01f84de0-d512-4693-942a-1ab0855254a1.png)
+![image](https://user-images.githubusercontent.com/79700810/150324402-d9e1c93a-46b0-42ac-83a0-02b97da4829b.png)
 
-![image](https://user-images.githubusercontent.com/79700810/149763486-8c0dfe06-400f-421c-abe2-d63678ae0418.png)
+
 
 ![image](https://user-images.githubusercontent.com/79700810/149763513-cb821774-83ce-40f9-a47d-eaa3941504a5.png)
 
@@ -1242,7 +1233,7 @@ systemctl restart sshd
 #### CLI ssl
 
 ```powershell
-scp -P 2244 'root@5.5.5.100:/opt/share/ca.cer' C:\Users\Admin\Desktop\
+scp -P 2244 'root@5.5.5.100:/opt/share/ca.cer' C:\Users\user\Desktop\
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/149774248-784bebe3-8015-414f-88dc-e96f91dfd395.png)\
