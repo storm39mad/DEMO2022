@@ -55,7 +55,6 @@ hostname RTR-L
 do wr
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149130676-f87df5f2-ff68-42f9-9ad6-12397ffa7da1.png)
 
 #### RTR-R
 
@@ -65,7 +64,6 @@ conf t
 hostname RTR-R
 do wr
 ```
-![image](https://user-images.githubusercontent.com/79700810/149131854-405305c4-0836-45f3-84d2-216de66648bb.png)
 
 #### SRV
 
@@ -73,7 +71,6 @@ do wr
 Rename-Computer -NewName SRV
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149132196-2d6adb20-5d45-4b81-bb11-c7f2a9e4091a.png)
 
 #### WEB-L
 
@@ -81,7 +78,7 @@ Rename-Computer -NewName SRV
 hostnamectl set-hostname WEB-L
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149132399-17daa67d-9e3a-4ed9-ac7f-a16ceb841839.png)
+
 
 #### WEB-R
 
@@ -89,7 +86,7 @@ hostnamectl set-hostname WEB-L
 hostnamectl set-hostname WEB-R
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149132565-36c043eb-5a6f-48a1-89e4-2d98929a2af6.png)
+
 
 #### ISP
 
@@ -97,7 +94,7 @@ hostnamectl set-hostname WEB-R
 hostnamectl set-hostname ISP
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149132932-73fa60e9-37ce-448c-8a7b-a1176f9ac814.png)
+
 
 #### CLI
 
@@ -105,7 +102,6 @@ hostnamectl set-hostname ISP
 Rename-Computer -NewName CLI
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149140416-38cb1f3d-5be7-461d-a833-c1301d4e06a8.png)
 
 
 ### 3.  Адресация должна быть выполнена в соответствии с Таблицей 1;
@@ -124,7 +120,7 @@ end
 wr
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149131532-441bf23b-1cc1-443a-90e5-6fd6863248bb.png)
+
 
 #### RTR-R
 
@@ -141,7 +137,7 @@ no sh
 end
 wr
 ```
-![image](https://user-images.githubusercontent.com/79700810/149136014-1b7f6173-e5c7-404e-ac77-120f11947809.png)
+
 
 #### SRV
 
@@ -154,7 +150,7 @@ Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("
 ```powershell
 Set-NetFirewallRule -DisplayGroup "File And Printer Sharing" -Enabled True -Profile Any
 ```
-![image](https://user-images.githubusercontent.com/79700810/149136645-da7a2f8c-a223-4961-aeb6-a4276bbe4b6d.png)
+
 
 #### WEB-L
 
@@ -168,7 +164,7 @@ nmcli connection show
 nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '192.168.100.100/24' ipv4.dns 192.168.100.200 ipv4.gateway 192.168.100.254
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149137520-04fb65d6-ac34-4e2f-a4d8-f6eed3011574.png)
+
 
 #### WEB-R
 
@@ -182,7 +178,7 @@ nmcli connection show
 nmcli connection modify Wired\ connection\ 1 conn.autoconnect yes conn.interface-name ens192 ipv4.method manual ipv4.addresses '172.16.100.100/24' ipv4.dns 192.168.100.200 ipv4.gateway 172.16.100.254
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149138018-65de91c7-6431-45fe-884b-a7edf32201df.png)
+
 
 #### ISP
 
@@ -201,7 +197,7 @@ nmcli connection modify Wired\ connection\ 2 conn.autoconnect yes conn.interface
 nmcli connection modify Wired\ connection\ 3 conn.autoconnect yes conn.interface-name ens256 ipv4.method manual ipv4.addresses '5.5.5.1/24'
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149140670-2d614562-4038-4103-ad34-49044058eff0.png)
+
 
 
 #### CLI
@@ -212,7 +208,7 @@ New-NetIPAddress -InterfaceIndex $GetIndex.ifIndex -IPAddress 3.3.3.10 -PrefixLe
 Set-DnsClientServerAddress -InterfaceIndex $GetIndex.ifIndex -ServerAddresses ("3.3.3.1")
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149141167-2233dd9d-3bb8-46eb-b00e-2c8aae2b09a5.png)
+
 
 ### 4.  Обеспечьте ВМ дополнительными дисками, если таковое необходимо в соответствии с Таблицей 1;
 
