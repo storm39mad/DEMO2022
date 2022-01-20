@@ -609,11 +609,6 @@ nano /opt/dns/demo.db
 @ IN SOA demo.wsr. root.demo.wsr.(
 ```
 
-    1.3. Сервер делегирует зону int.demo.wsr на SRV
-      <ul>
-          <li>Поскольку SRV находится во внутренней сети западного региона, делегирование происходит на внешний адрес маршрутизатора данного региона. 
-     </ul>  
-
 
 ```debian
 @ IN NS isp.demo.wsr.
@@ -625,7 +620,8 @@ int IN NS rtr-l.demo.wsr
 rtr-l IN  A 4.4.4.100
 ```
 
-![image](https://user-images.githubusercontent.com/79700810/149897156-6b854933-a735-4813-bdf3-a9ea9944e16e.png)
+![149897156-6b854933-a735-4813-bdf3-a9ea9944e16e](https://user-images.githubusercontent.com/79700810/150322909-a9b426ab-9ed2-46e6-bcd2-db39609fe406.png)
+
 
 
 
