@@ -1,0 +1,66 @@
+---
+- name: Checker
+  hosts: localhost
+  connection: local
+  tasks:
+
+    - name: hostname
+      hostname:
+        name: 'WEB-L'
+
+    - name: ens192
+      shell: ':'
+      check_mode: no
+      changed_when:
+        - ( ansible_ens192.ipv4 is not defined ) or
+          ( ansible_ens192.ipv4.address != '192.168.100.100' ) or
+          ( ansible_ens192.ipv4.netmask != '255.255.255.0')
+
+    - name: gw
+      shell: ':'
+      check_mode: no
+      changed_when: ansible_default_ipv4.gateway != '192.168.100.254'
+    
+    - name: nameserver
+      shell: ':'
+      check_mode: no
+      changed_when:
+        - (ansible_dns.nameservers is not defined) or
+          ((ansible_dns.nameservers|length)!=1) or
+          (ansible_dns.nameservers[0]!='192.168.100.200')
+    
+    - name: inet
+      shell: 'ping -c2 -W1 5.5.5.1'
+      check_mode: no
+      ignore_errors: yes
+      register: status
+      changed_when: status.rc != 0
+    
+    - name: tunnel
+      shell: 'ping -c2 -W1 172.16.100.100'
+      check_mode: no
+      ignore_errors: yes
+      register: status
+      changed_when: status.rc != 0
+    
+    - name: docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+      ignore_errors: yes
+      register: status
+      changed_when: status.failed or status.changed
+    
+    - name: docker_image
+      docker_image:
+        name: 'app'
+        tag: 'latest'
+        source: local
+        state: present
+    
+    - name: docker_container
+      shell: 'docker ps -a -q --filter ancestor="app:latest" | wc -l 2>/dev/null'
+      check_mode: no
+      register: status
+      changed_when: status.stdout != "1"

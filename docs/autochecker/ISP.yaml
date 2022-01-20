@@ -1,0 +1,84 @@
+---
+- name: Checker
+  hosts: localhost
+  connection: local
+  tasks:
+
+    - name: hostname
+      hostname:
+        name: 'ISP'
+
+    - name: ens192
+      shell: ':'
+      check_mode: no
+      changed_when:
+        - ( ansible_ens192.ipv4 is not defined ) or
+          ( ansible_ens192.ipv4.address != '3.3.3.1' ) or
+          ( ansible_ens192.ipv4.netmask != '255.255.255.0')
+    
+    - name: ens224
+      shell: ':'
+      check_mode: no
+      changed_when:
+        - ( ansible_ens224.ipv4 is not defined ) or
+          ( ansible_ens224.ipv4.address != '4.4.4.1' ) or
+          ( ansible_ens224.ipv4.netmask != '255.255.255.0')
+    
+    - name: ens256
+      shell: ':'
+      check_mode: no
+      changed_when:
+        - ( ansible_ens256.ipv4 is not defined ) or
+          ( ansible_ens256.ipv4.address != '5.5.5.1' ) or
+          ( ansible_ens256.ipv4.netmask != '255.255.255.0')
+    
+    - name: connected_only
+      shell: ip -j r | jq '[.[]|select(.scope!="link")]|length'
+      check_mode: no
+      register: status
+      changed_when: status.stdout != "0"
+    
+    - name: ip_forward
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        sysctl_set: yes
+        state: present
+    
+    - name: bind_installed
+      systemd:
+        name: bind9
+        enabled: yes
+        state: started
+      ignore_errors: yes
+      register: status
+      changed_when: status.failed or status.changed
+
+    # DNSMASQ?
+    
+    - name: chronyd_installed
+      systemd:
+        name: chronyd
+        enabled: yes
+        state: started
+      ignore_errors: yes
+      register: status
+      changed_when: status.failed or status.changed
+    
+    - name: chronyd_stratum
+      shell: 'chronyc -c tracking | cut -d, -f3'
+      check_mode: no
+      register: status
+      changed_when: status.stdout != "4"
+    
+    - name: ssh_left
+      shell: 'sshpass -p user ssh -o StrictHostKeyChecking=no user@4.4.4.100 -p 2222 "grep -q ID=debian /etc/os-release 2>/dev/null"'
+      check_mode: no
+      register: status
+      changed_when: status.rc != 0
+    
+    - name: ssh_right
+      shell: 'sshpass -p user ssh -o StrictHostKeyChecking=no user@5.5.5.100 -p 2244 "grep -q ID=debian /etc/os-release 2>/dev/null"'
+      check_mode: no
+      register: status
+      changed_when: status.rc != 0
