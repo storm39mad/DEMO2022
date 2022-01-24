@@ -78,7 +78,7 @@
       changed_when: status.rc != 0
     
     - name: ssh_right
-      shell: 'sshpass -p user ssh -o StrictHostKeyChecking=no user@5.5.5.100 -p 2244 "grep -q ID=debian /etc/os-release 2>/dev/null"'
+      shell: 'sshpass -p user ssh -o StrictHostKeyChecking=no user@4.4.4.100 -p 2244 "grep -q ID=debian /etc/os-release 2>/dev/null"'
       check_mode: no
       register: status
       changed_when: status.rc != 0

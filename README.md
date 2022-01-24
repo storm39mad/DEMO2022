@@ -264,9 +264,7 @@ nano /etc/sysctl.conf
 
 ![image](https://user-images.githubusercontent.com/79700810/149896195-71778f11-2e69-4750-b6a0-9424d4dc8890.png)
 
-```debian
-sysctl -p
-```
+
 #### RTR-L Gitw
 
 ```cisco
@@ -455,9 +453,17 @@ ip access-group Rnew in
 
 ```cisco
 ip nat inside source static tcp 192.168.100.100 22 4.4.4.100 2222
-ip nat inside source static tcp 172.16.100.100 22 4.4.4.100 2244
 ```
 
+
+
+
+
+#### SSH RTR-R
+
+```cisco
+ip nat inside source static tcp 172.16.100.100 22 5.5.5.100 2244
+```
 
 #### SSH WEB-L
 
@@ -830,30 +836,28 @@ New-Partition -DiskNumber 3 -UseMaximumSize -DriveLetter R
 Format-Volume -DriveLetter R
 ```
 
-#### SRV SMB
+#### SRV NFS
 
 ```powershell
 Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools
+Install-WindowsFeature -Name FS-NFS-Service -IncludeManagementTools
 ```
 
 ```powershell
-New-SmbShare -Name "SMB" -Path "R:\storage" -FullAccess "Everyone"
+New-Item -Path R:\storage -ItemType Directory
 ```
+
+```powershell
+New-NfsShare -Path "R:\shares" -Name nfs -Permission Readwrite
+```
+
 
 ### 6. Сервера WEB-L и WEB-R должны использовать службу, настроенную на SRV, для обмена файлами между собой:
-#### WEB-L SMB
+#### WEB-L nfs
 
 ```debian
-apt install -y cifs-utils
-```
-
-```debian
-nano /root/.smbclient
-```
-
-```debian
-username=Administrator
-password=Pa$$w0rd
+apt-cdrom add
+apt -y install nfs-common
 ```
 
 ```debian
@@ -861,7 +865,7 @@ nano /etc/fstab
 ```
 
 ```debian
-//srv.int.demo.wsr/smb /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
+    srv.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
 ```
 
 ```debian
@@ -869,19 +873,11 @@ mkdir /opt/share
 mount -a
 ```
 
-#### WEB-R SMB
+#### WEB-R nfs
 
 ```debian
-apt install -y cifs-utils
-```
-
-```debian
-nano /root/.smbclient
-```
-
-```debian
-username=Administrator
-password=Pa$$w0rd
+apt-cdrom add
+apt -y install nfs-common
 ```
 
 ```debian
@@ -889,14 +885,14 @@ nano /etc/fstab
 ```
 
 ```debian
-//srv.int.demo.wsr/smb /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
+    #<file system>
+    srv.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
 ```
 
 ```debian
 mkdir /opt/share
 mount -a
 ```
-
 ### 7. Выполните настройку центра сертификации на базе SRV:
 #### SRV ADCS
 

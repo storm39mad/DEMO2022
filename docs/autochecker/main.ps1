@@ -129,10 +129,10 @@ function Get-Marks {
             "Name" = "C: SRV has RAID Mirror"; "Max" = 0.5; "Mark" = if ( $results.SRV_OUT.raid -and $results.SRV_OUT.drive_letter ) { 0.5 } else { 0 }
         },
         [pscustomobject]@{
-            "Name" = "C: SRV has NFS share"; "Max" = 0.3; "Mark" = if ( $results.SRV_OUT.nfs_share ) { 0.3 } else { 0 }
+            "Name" = "C: SRV has SMB share"; "Max" = 0.3; "Mark" = if ( $results.SRV_OUT.smb_share ) { 0.3 } else { 0 }
         },
         [pscustomobject]@{
-            "Name" = "C: WEB-L and WEB-R connected to NFS"; "Max" = 0.3; "Mark" = if ( $results.SRV_OUT.nfs_clients ) { 0.3 } else { 0 }
+            "Name" = "C: WEB-L and WEB-R connected to SMB"; "Max" = 0.3; "Mark" = if ( $results.SRV_OUT.smb_clients ) { 0.3 } else { 0 }
         },
         [pscustomobject]@{
             "Name" = "C: CA is configured"; "Max" = 1; "Mark" = if ( $results.SRV_OUT.ca ) { 1 } else { 0 }
@@ -166,7 +166,7 @@ $vcsa = "vcsacluster.ouiit.local"
 Connect-VIServer -Server $vcsa
 
 $count = 0
-while ($count -lt 3) {
+while ($count -le 1) {
 
     $rp = Get-ResourcePool -Name "TF_DEMO2022-C$($count.ToString())"
     $student = ($rp | Get-VIPermission | Where-Object { $_.Role -eq 'DEMOEX2022' }).Principal.Split("\")[1]

@@ -43,9 +43,13 @@ if((Get-WindowsFeature -Name  AD-Certificate).installstate  -eq 'Installed'){
     } 
 }
 
-$shares = Get-NfsShare -ErrorAction Ignore | Where-Object { $_.Path -match '^R:\.*'} | Get-NfsSharePermission | Where-Object { $_.Permission -eq 'readwrite'}
+$nfs_share = Get-NfsShare -ErrorAction Ignore | Where-Object { $_.Path -match '^R:\.*'} | Get-NfsSharePermission | Where-Object { $_.Permission -eq 'readwrite'}
 $clients = (Get-NfsMountedClient -ErrorAction Ignore).ClientIpAddress
 $nfs_clients = if ($clients -and ('172.16.100.100' -in $clients) -and ('192.168.100.100') -in $clients){ $true }else{$false}
+
+$smb_share = Get-SmbShare -ErrorAction Ignore | Where-Object { ($_.Description -ne 'Default share') -and ($_.Path -match '^R:.*')} 
+$clients = (Get-SmbSession -ErrorAction Ignore).ClientComputerName 
+$smb_clients = if ( $clients -and ('192.168.100.100' -in $clients) -and ('172.16.100.100' -in $clients)) { $true } else { $false }
 
 @{
     "hostname"        = $($computer_name -eq "SRV")
@@ -60,6 +64,8 @@ $nfs_clients = if ($clients -and ('172.16.100.100' -in $clients) -and ('192.168.
     "drive_letter"    = if($drive_latter -eq "R"){ $true } else { $false }
     "ca"              = $ca
     "ca_days"         = $ca_days
-    "nfs_share"       = if($shares){ $true } else { $false }
+    "nfs_share"       = if($nfs_share){ $true } else { $false }
     "nfs_clients"     = $nfs_clients
+    "smb_share"       = if($smb_share){ $true } else { $false }
+    "smb_clients"     = $smb_clients
 } | ConvertTo-Json
