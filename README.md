@@ -262,6 +262,9 @@ nano /etc/sysctl.conf
    net.ipv4.ip_forward=1
 ```
 
+```debian
+   sysctl -p
+```
 ![image](https://user-images.githubusercontent.com/79700810/149896195-71778f11-2e69-4750-b6a0-9424d4dc8890.png)
 
 
@@ -453,16 +456,7 @@ ip access-group Rnew in
 
 ```cisco
 ip nat inside source static tcp 192.168.100.100 22 4.4.4.100 2222
-```
-
-
-
-
-
-#### SSH RTR-R
-
-```cisco
-ip nat inside source static tcp 172.16.100.100 22 5.5.5.100 2244
+ip nat inside source static tcp 172.16.100.100 22 4.4.4.100 2244
 ```
 
 #### SSH WEB-L
@@ -840,24 +834,28 @@ Format-Volume -DriveLetter R
 
 ```powershell
 Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools
-Install-WindowsFeature -Name FS-NFS-Service -IncludeManagementTools
 ```
 
 ```powershell
-New-Item -Path R:\storage -ItemType Directory
-```
-
-```powershell
-New-NfsShare -Path "R:\shares" -Name nfs -Permission Readwrite
+New-SmbShare -Name "SMB" -Path "R:\storage" -FullAccess "Everyone"
 ```
 
 
 ### 6. Сервера WEB-L и WEB-R должны использовать службу, настроенную на SRV, для обмена файлами между собой:
-#### WEB-L nfs
+#### WEB-L SMB
 
 ```debian
 apt-cdrom add
-apt -y install nfs-common
+apt install -y cifs-utils
+```
+
+```debian
+nano /root/.smbclient
+```
+
+```debian
+username=Administrator
+password=Pa$$w0rd
 ```
 
 ```debian
@@ -865,19 +863,27 @@ nano /etc/fstab
 ```
 
 ```debian
-    srv.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
+//srv.int.demo.wsr/share /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
 ```
-
 ```debian
 mkdir /opt/share
 mount -a
 ```
 
-#### WEB-R nfs
+#### WEB-R SMB
 
 ```debian
 apt-cdrom add
-apt -y install nfs-common
+apt install -y cifs-utils
+```
+
+```debian
+nano /root/.smbclient
+```
+
+```debian
+username=Administrator
+password=Pa$$w0rd
 ```
 
 ```debian
@@ -885,10 +891,8 @@ nano /etc/fstab
 ```
 
 ```debian
-    #<file system>
-    srv.int.demo.wsr:/nfs /opt/share nfs defaults,_netdev 0 0
+//srv.int.demo.wsr/share /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
 ```
-
 ```debian
 mkdir /opt/share
 mount -a
