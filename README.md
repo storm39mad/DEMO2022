@@ -841,7 +841,7 @@ New-SmbShare -Name "SMB" -Path "R:\storage" -FullAccess "Everyone"
 ```
 
 ### 6. Сервера WEB-L и WEB-R должны использовать службу, настроенную на SRV, для обмена файлами между собой:
-#### WEB-L nfs
+#### WEB-L SMB
 
 ```debian
 apt install -y cifs-utils
@@ -869,7 +869,7 @@ mkdir /opt/share
 mount -a
 ```
 
-#### WEB-R nfs
+#### WEB-R SMB
 
 ```debian
 apt install -y cifs-utils
