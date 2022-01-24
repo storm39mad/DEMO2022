@@ -30,7 +30,7 @@
           (ansible_dns.nameservers[0]!='192.168.100.200')
     
     - name: inet
-      shell: 'ping -c2 -W1 4.4.4.1'
+      shell: 'ping -c2 -W1 4.4.4.100'
       check_mode: no
       ignore_errors: yes
       register: status
