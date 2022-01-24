@@ -861,7 +861,7 @@ nano /etc/fstab
 ```
 
 ```debian
-//srv.int.demo.wsr/share /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
+//srv.int.demo.wsr/smb /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
 ```
 
 ```debian
@@ -889,7 +889,7 @@ nano /etc/fstab
 ```
 
 ```debian
-//srv.int.demo.wsr/share /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
+//srv.int.demo.wsr/smb /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
 ```
 
 ```debian
