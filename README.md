@@ -264,7 +264,9 @@ nano /etc/sysctl.conf
 
 ![image](https://user-images.githubusercontent.com/79700810/149896195-71778f11-2e69-4750-b6a0-9424d4dc8890.png)
 
-
+```debian
+sysctl -p
+```
 #### RTR-L Gitw
 
 ```cisco
