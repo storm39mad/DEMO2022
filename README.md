@@ -455,17 +455,9 @@ ip access-group Rnew in
 
 ```cisco
 ip nat inside source static tcp 192.168.100.100 22 4.4.4.100 2222
+ip nat inside source static tcp 172.16.100.100 22 4.4.4.100 2244
 ```
 
-
-
-
-
-#### SSH RTR-R
-
-```cisco
-ip nat inside source static tcp 172.16.100.100 22 5.5.5.100 2244
-```
 
 #### SSH WEB-L
 
