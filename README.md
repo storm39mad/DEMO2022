@@ -841,6 +841,7 @@ Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools
 ```
 
 ```powershell
+New-Item -Path R:\storage -ItemType Directory
 New-SmbShare -Name "SMB" -Path "R:\storage" -FullAccess "Everyone"
 ```
 
