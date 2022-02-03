@@ -834,7 +834,7 @@ New-Partition -DiskNumber 3 -UseMaximumSize -DriveLetter R
 Format-Volume -DriveLetter R
 ```
 
-#### SRV NFS
+#### SRV SMB
 
 ```powershell
 Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools
