@@ -614,7 +614,7 @@ isp IN A 3.3.3.1
 www IN 4.4.4.100
 www IN 5.5.5.100
 internet CNAME isp.demo.wsr.
-int IN NS rtr-l.demo.wsr
+int IN NS rtr-l.demo.wsr.
 rtr-l IN  A 4.4.4.100
 ```
 
