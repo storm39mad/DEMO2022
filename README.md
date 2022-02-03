@@ -624,7 +624,7 @@ rtr-l IN  A 4.4.4.100
 
 
 ```debian
-systemctl restatr bind9
+systemctl restart bind9
 ```
 
 
