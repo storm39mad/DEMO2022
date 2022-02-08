@@ -49,43 +49,60 @@ git clone https://github.com/storm39mad/DEMO2022.git
 
 ![image](https://user-images.githubusercontent.com/79700810/152992126-e609b36b-7f75-4260-b413-da271a6620d3.png)
 
-
+Делаем terraform init в Terminal для скачивания плагинов
 ```powershell
 terraform init
 ```
 
-
-
 ![image](https://user-images.githubusercontent.com/79700810/152992752-9c43289e-2d23-47c7-9de8-9b60004df629.png)
 
-
+Для подключения к порталу azure используем az login и указываем свою учетную запись
+```powershell
+az login
+```
 
 ![image](https://user-images.githubusercontent.com/79700810/152995696-d8a4c051-bc3d-4616-8a61-f70890cc286d.png)
 
+на портале azure переходим в группу ресурсов 
+
 ![image](https://user-images.githubusercontent.com/79700810/152995939-6f3363d3-ba6f-47ae-81f2-94333213c083.png)
 
+ Создаем новую группу ресурсов 
+ 
 ![image](https://user-images.githubusercontent.com/79700810/152996116-b00bab67-d548-4c77-9b26-3fea462495a1.png)
 
+в файле main.tf меняем "Azure-competition-KP11_prof" на вашу группу 
 ![image](https://user-images.githubusercontent.com/79700810/152996429-086839d5-c03a-43c2-84b0-787409f23ede.png)
 
+для проверки конфигурации используем terraform plan
+
+```powershell
+terraform plan
+```
+![image](https://user-images.githubusercontent.com/79700810/153010655-3413249f-aa93-44cc-a5e5-3a9d3ced8158.png)
+
+
+для развертывания инфраструктуры terraform apply 
 ```powershell
 terraform apply
 ```
 ```powershell
 yes
 ```
+
 ![image](https://user-images.githubusercontent.com/79700810/153000909-fcde95bd-2ad5-4ecb-9b81-19071c35b4a4.png)
 
 
+обязательно нужно указать yes
 
 ![image](https://user-images.githubusercontent.com/79700810/153001108-d7cd7070-025f-4351-8c67-57399546e041.png)
 
 
-
+после чего в группе ресурсов будат созданны все необхожимые и описанные элементы инфраструктуры
 ![image](https://user-images.githubusercontent.com/79700810/153005787-87d7d071-b78d-42fe-889e-ac1a1a6ae4e4.png)
 
 
-
+После выполнения работы используем terraform destroy для удаления элементов инфраструктуры
 ```powershell
 terraform destroy
 ```
