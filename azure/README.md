@@ -33,4 +33,7 @@
 |WEB-L           |Debian 11          |Standard B2s    |2/4             |10.0.2.6/24        |                       |
 |WEB-R           |Debian 11          |Standard B2s    |2/4             |172.16.2.6/24        |                       |
 |ISP           |Debian 11          |Standard B2s    |2/4             |192.168.1.5/24        |        public-ip               |
-|CLI             |Win 10              |Physical PS           |4               |any           |          internet                         |
+|CLI             |Win 10              |Physical PS           |2/4               |any           |          internet                         |
+
+
+
