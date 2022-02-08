@@ -68,6 +68,15 @@ yes
 
 ![image](https://user-images.githubusercontent.com/79700810/153001108-d7cd7070-025f-4351-8c67-57399546e041.png)
 
+
+
+![image](https://user-images.githubusercontent.com/79700810/153005787-87d7d071-b78d-42fe-889e-ac1a1a6ae4e4.png)
+
+
+
 ```powershell
 terraform destroy
 ```
+
+![image](https://user-images.githubusercontent.com/79700810/153005950-7bb7ed75-07df-432b-9066-fca4ea2ffd43.png)
+
