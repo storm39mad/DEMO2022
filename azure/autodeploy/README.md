@@ -57,3 +57,13 @@ terraform init
 
 ![image](https://user-images.githubusercontent.com/79700810/152996429-086839d5-c03a-43c2-84b0-787409f23ede.png)
 
+```powershell
+terraform apply
+```
+![image](https://user-images.githubusercontent.com/79700810/153000909-fcde95bd-2ad5-4ecb-9b81-19071c35b4a4.png)
+
+yes
+
+![image](https://user-images.githubusercontent.com/79700810/153001108-d7cd7070-025f-4351-8c67-57399546e041.png)
+
+
