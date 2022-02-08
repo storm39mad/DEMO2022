@@ -10,6 +10,10 @@
 
 ![DEMO2022azure-Page-5 drawio (1)](https://user-images.githubusercontent.com/79700810/152940108-a33f9a43-91e4-4709-811a-215c52bff54b.png)
 
+![DEMO2022azure-Page-8 drawio](https://user-images.githubusercontent.com/79700810/152974994-45982b32-42b3-4eff-a10d-f70b93988283.png)
+
+
+
 ## Виртуальные машины и коммутация.
 Необходимо выполнить создание и базовую конфигурацию виртуальных
 машин.
