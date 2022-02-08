@@ -85,7 +85,7 @@
 
 ### 1. Сети, подключенные к ISP, считаются внешними:
 
-## RTR-L
+#### RTR-L
 Подключаемся по ssh к public-ip RTR-L
 
 ```debian
@@ -100,7 +100,7 @@ sudo -i
 sysctl -p
 ```
 
-## RTR-R
+#### RTR-R
 Подключаемся по ssh к public-ip RTR-R
 
 ```debian
@@ -118,7 +118,7 @@ sysctl -p
 
 ### 2. Платформы контроля трафика, установленные на границах регионов, должны выполнять трансляцию трафика, идущего из соответствующих внутренних сетей во внешние сети стенда и в сеть Интернет.
 
-## RTR-L
+#### RTR-L
 
 ```debian
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
@@ -129,7 +129,7 @@ apt-get -y install iptables-persistent
 ```
 
 
-## RTR-R
+#### RTR-R
 
 ```debian
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
@@ -233,3 +233,175 @@ include /etc/ipsec.d/*.conf
 ```debian
 systemctl restart ipsec.service
 ```
+#### RTR-L
+
+```debian
+apt install -y frr
+```
+
+```debian
+nano /etc/frr/daemons
+```
+
+```debian
+eigrpd=yes
+```
+
+```debian
+systemctl restart frr.service
+systemctl enable frr
+```
+
+```debian
+vtysh
+```
+
+```debian
+conf t
+router eigrp 6500
+network 10.0.2.0/24 
+network 192.168.20.0/30
+do wr
+```
+#### RTR-R
+
+```debian
+apt install -y frr
+```
+
+```debian
+nano /etc/frr/daemons
+```
+
+```debian
+eigrpd=yes
+```
+
+```debian
+systemctl restart frr.service
+systemctl enable frr
+```
+
+```debian
+vtysh
+```
+
+```debian
+conf t
+router eigrp 6500
+network 172.16.2.0/24 
+network 192.168.20.0/30
+do wr
+```
+
+###  4. Платформа управления трафиком RTR-L выполняет контроль входящего трафика согласно следующим правилам:
+#### RTR-L ACL
+
+```debian
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 2222 -j DNAT --to 10.0.2.6:22
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to 10.0.2.6:80
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j DNAT --to 10.0.2.6:443
+iptables -t nat -A PREROUTING -i eth0 -p udp --dport 53 -j DNAT --to 10.0.2.7:53
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 3389 -j DNAT --to 10.0.2.7:3389
+```
+
+```debian
+iptables -A INPUT -i eth0 -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --dport 500 -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --dport 4500 -j ACCEPT
+iptables -A INPUT -i eth0 -p esp  -j ACCEPT
+iptables -A INPUT -i eth0 -p icmp -j ACCEPT
+iptables -A INPUT -i eth0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i eth0 -j REJECT
+```
+
+### 5. Платформа управления трафиком RTR-R выполняет контроль входящего трафика согласно следующим правилам:
+
+#### RTR-R ACL
+
+```debian
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 2244 -j DNAT --to 172.16.2.6:22
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to 172.16.2.6:80
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j DNAT --to 172.16.2.6:443
+```
+
+```debian
+iptables -A INPUT -i eth0 -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --dport 500 -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --dport 4500 -j ACCEPT
+iptables -A INPUT -i eth0 -p esp  -j ACCEPT
+iptables -A INPUT -i eth0 -p icmp -j ACCEPT
+iptables -A INPUT -i eth0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i eth0 -j REJECT
+```
+
+### 6. Обеспечьте настройку служб SSH региона Left:
+При работе в Azure служба ssh будет установлина и сконфигурирована
+
+
+## Инфраструктурные службы
+
+В рамках данного модуля необходимо настроить основные
+инфраструктурные службы и настроить представленные ВМ на применение этих
+служб для всех основных функций. 
+
+1. Выполните настройку первого уровня DNS-системы стенда:
+   - Используется ВМ ISP;
+   - Обслуживается зона demo.wsr
+     - Наполнение зоны должно быть реализовано в соответствии с Таблицей 2;
+   - Сервер делегирует зону int.demo.wsr на SRV;
+     - Поскольку SRV находится во внутренней сети западного региона, делегирование происходит на внешний адрес маршрутизатора данного региона. 
+     - Маршрутизатор региона должен транслировать соответствующие порты DNS-службы в порты сервера SRV
+   - Внешний клиент CLI должен использовать DNS-службу, развернутую на ISP, по умолчанию;
+2. Выполните настройку второго уровня DNS-системы стенда;
+   - Используется ВМ SRV;
+   - Обслуживается зона int.demo.wsr;
+     - Наполнение зоны должно быть реализовано в соответствии с Таблицей 2;
+   - Обслуживаются обратные зоны для внутренних адресов регионов
+     - Имена для разрешения обратных записей следует брать из Таблицы 2;
+   - Сервер принимает рекурсивные запросы, исходящие от адресов внутренних регионов;
+     - Обслуживание клиентов(внешних и внутренних),  обращающихся к к зоне int.demo.wsr, должно производится без каких либо ограничений по адресу источника;
+   - Внутренние хосты регионов (равно как и платформы управления трафиком) должны использовать данную DNS-службу для разрешения всех запросов имен;
+3. Выполните настройку первого уровня системы синхронизации времени:
+   - Используется сервер ISP. 
+   - Сервер считает собственный источник времени верным, stratum=4;
+   - Сервер допускает подключение только через внешний адрес соответствующей платформы управления трафиком;
+     - Подразумевается обращение SRV для синхронизации времени;
+   - Клиент CLI должен использовать службу времени ISP;
+4. Выполните конфигурацию службы второго уровня времени на SRV
+   - Сервер синхронизирует время с хостом ISP;
+     - Синхронизация с другими источникам запрещена;
+   - Сервер должен допускать обращения внутренних хостов регионов, в том числе и платформ управления трафиком, для синхронизации времени;
+   - Все внутренние хосты(в том числе и платформы управления трафиком) должны синхронизировать свое время с SRV;
+5. Реализуйте файловый SMB-сервер на базе SRV
+   - Сервер должен предоставлять доступ для обмена файлами серверам WEB-L и WEB-R;
+   - Сервер, в зависимости от ОС, использует следующие каталоги для хранения файлов:
+     - /mnt/storage для система на базе Linux;
+     - Диск R:\ для систем на базе Windows;
+   - Хранение файлов осуществляется на диске (смонтированном по указанным выше адресам), реализованном по технологии RAID типа “Зеркало”;
+6. Сервера WEB-L и WEB-R должны использовать службу, настроенную на SRV, для обмена файлами между собой:
+   - Служба файлового обмена должна позволять монтирование в виде стандартного каталога Linux
+     - Разделяемый каталог должен быть смонтирован по адресу /opt/share;
+   - Каталог должен позволять удалять и создавать файлы в нем для всех пользователей;
+7. Выполните настройку центра сертификации на базе SRV:
+   - В случае применения решения на базе Linux используется центр сертификации типа OpenSSL и располагается по адресу /var/ca
+   - Выдаваемые сертификаты должны иметь срок жизни не менее 500 дней;
+   - Параметры выдаваемых сертификатов:
+     - Страна RU;
+     - Организация DEMO.WSR;
+     - Прочие поля (за исключением CN) должны быть пусты;
+
+
+## Таблица 2. DNS-записи зон
+
+|Zone            |Type                |Key             |Meaning         |
+|  ------------- | -------------      | -------------  |  ------------- |
+| demo.wsr       | A                  | isp            | <public-ip-ISP>        |
+|                | A                  | www            |<public-ip-RTR-L>      |
+|                | A                  | www            | <public-ip-RTR-R>     |
+|                | CNAME              | internet       | isp            |
+|                | NS                 | int            | rtr-l.demo.wsr      |
+|                | A                  | rtr-l       | <public-ip-RTR-L>     |
+   
+
+### 1. Выполните настройку первого уровня DNS-системы стенда:
