@@ -760,11 +760,15 @@ Restart-Service CertSrc
      - Отказ одной из ВМ Web
      - Отказ одной из ВМ управления трафиком. 
 
-#### WEB-L Doc
+
 
 ### 1. Образ Docker (содержащий веб-приложение) расположен на ISO-образе дополнительных материалов;
 
+https://hub.docker.com/r/kp11/app
+
 ### 2. Пакеты для установки Docker расположены на дополнительном ISO-образе;
+#### WEB-L Doc
+
 ```debian
 apt-get update
 ```
@@ -786,5 +790,120 @@ apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io
 ```
 
+```debian
+docker run --name app  -p 8080:80 -d kp11/app:latest
+docker ps
+```
 
+#### WEB-R Doc
+
+```debian
+apt-get update
+```
+```debian
+apt-get -y install ca-certificates curl gnupg lsb-release
+```
+```debian
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+```
+```debian
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+```debian
+apt-get update
+```
+
+```debian
+apt-get install -y docker-ce docker-ce-cli containerd.io
+```
+
+```debian
+docker run --name app  -p 8080:80 -d kp11/app:latest
+docker ps
+```
+#### ISP
+
+```debian
+apt install -y nginx
+```
+```debian
+nano /etc/nginx/sites-available/default
+```
+
+```debian
+upstream backend {
+ server <public-ip-RTR-L>:80 fail_timeout=25;
+ server <public-ip-RTR-R>:80 fail_timeout=25;
+}
+
+server {
+   listen 80  default_server;
+ location / {
+  proxy_pass http://backend;
+ }
+  server_name _;
+
+}
+```
+
+```debian
+systemctl reload nginx.service
+```
+
+#### WEB-L Для работы только на 80
+```debian
+apt install -y nginx
+```
+
+```debian
+nano /etc/nginx/sites-available/default
+```
+```debian
+upstream backend {
+ server 10.0.2.6:8080 fail_timeout=25;
+ server 172.16.2.6:8080 fail_timeout=25;
+}
+
+server {
+   listen 80  default_server;
+ location / {
+  proxy_pass http://backend ;
+ }
+  server_name _;
+
+}
+```
+```debian
+systemctl reload nginx.service
+```
+
+#### WEB-R Для работы только на 80
+```debian
+apt install -y nginx
+```
+
+```debian
+nano /etc/nginx/sites-available/default
+```
+```debian
+upstream backend {
+ server 10.0.2.6:8080 fail_timeout=25;
+ server 172.16.2.6:8080 fail_timeout=25;
+}
+
+server {
+   listen 80  default_server;
+ location / {
+  proxy_pass http://backend ;
+ }
+  server_name _;
+
+}
+```
+```debian
+systemctl reload nginx.service
+```
+### 3. Инструкция по работе с приложением расположена на дополнительном ISO-образе;
+В данной момент инструкции к приложению нет, приложением является однастраничный сайт
 
