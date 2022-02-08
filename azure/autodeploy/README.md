@@ -11,6 +11,10 @@ choco install git
 ```powershell
 choco install vscode
 ```
+```powershell
+choco install azure-cli --version=2.0.79
+```
+
 ![image](https://user-images.githubusercontent.com/79700810/152991466-d80561df-8311-4495-91ab-209005325a8c.png)
 
 ```powershell
@@ -33,3 +37,11 @@ git clone https://github.com/storm39mad/DEMO2022.git
 
 
 ![image](https://user-images.githubusercontent.com/79700810/152992126-e609b36b-7f75-4260-b413-da271a6620d3.png)
+
+
+```powershell
+terraform init
+```
+
+![image](https://user-images.githubusercontent.com/79700810/152992752-9c43289e-2d23-47c7-9de8-9b60004df629.png)
+
