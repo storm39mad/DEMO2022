@@ -31,14 +31,14 @@
 
 |Name VM         |ОС                  |Size            |CPU /RAM        |IP                  |Additionally                       |
 |  ------------- | -------------      | -------------  |  ------------- |  -------------     |  -------------                    |  
-|RTR-L           |Debian 11       |Standard B2s    |2/4             |10.0.1.5/24         |       public-ip                   |
+|RTR-L           |Debian 11       |Standard B1s    |1/2             |10.0.1.5/24         |       public-ip                   |
 |                |                    |                |                |10.0.2.5/24         |                                   |
-|RTR-R           |Debian 11       |Standard B2s    |2/4             |172.16.1.5/24       |    public-ip                      |
+|RTR-R           |Debian 11       |Standard B1s    |1/2             |172.16.1.5/24       |    public-ip                      |
 |                |                    |                |                |172.16.2.5 /24      |                                   |
 |SRV             |Win 2019  |Standard B2s      |2/4           |10.0.2.7/24         |Доп диски 2 шт по 5 GB             |
 |WEB-L           |Debian 11          |Standard B2s    |2/4             |10.0.2.6/24        |                       |
 |WEB-R           |Debian 11          |Standard B2s    |2/4             |172.16.2.6/24        |                       |
-|ISP           |Debian 11          |Standard B2s    |2/4             |192.168.1.5/24        |        public-ip               |
+|ISP           |Debian 11          |Standard B1s    |1/2             |192.168.1.5/24        |        public-ip               |
 |CLI             |Win 10              |Physical PS           |2/4               |any           |          internet                         |
 
 
