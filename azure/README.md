@@ -164,7 +164,7 @@ conn mytunnel
     leftsubnet=0.0.0.0/0
     rightsubnet=0.0.0.0/0
     left=10.0.1.5
-    right=13.81.175.209
+    right=<public-ip-RTR-R>
     rightid=172.16.1.5
     mark=5/0xffffffff
     vti-interface=vti01
@@ -214,7 +214,7 @@ conn mytunnel
     encapsulation=yes
     leftsubnet=0.0.0.0/0
     rightsubnet=0.0.0.0/0
-    left=13.94.188.114
+    left=<public-ip-RTR-L>
     leftid=10.0.1.5
     right=172.16.1.5
     mark=5/0xffffffff
