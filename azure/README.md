@@ -396,7 +396,7 @@ iptables -A INPUT -i eth0 -j REJECT
 
 |Zone            |Type                |Key             |Meaning         |
 |  ------------- | -------------      | -------------  |  ------------- |
-| demo.wsr       | A                  | isp            | <public-ip-ISP>        |
+| demo.wsr       | A                  | isp            | "<public-ip-ISP>"        |
 |                | A                  | www            |<public-ip-RTR-L>      |
 |                | A                  | www            | <public-ip-RTR-R>     |
 |                | CNAME              | internet       | isp            |
