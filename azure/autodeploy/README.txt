@@ -4,3 +4,5 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 choco install terraform
 
 choco install git
+
+choco install vscode
