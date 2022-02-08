@@ -1,4 +1,10 @@
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+# DEMO2022
 
+# Образец задания
+Образец задания для демонстрационного экзамена по комплекту оценочной
+документации.
 
-choco install terraform
+# Описание задания
+# Модуль 1
+Вариант 1-0 (публичный)
+
