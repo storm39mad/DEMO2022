@@ -2,7 +2,7 @@
 
 
 
-[Auto deploy azure terraform](https://github.com/storm39mad/DEMO2022/blob/main/azure/autodeploy/README.md/ )
+# [Auto deploy azure terraform](https://github.com/storm39mad/DEMO2022/blob/main/azure/autodeploy/README.md/ )
 
 # Образец задания
 Образец задания для демонстрационного экзамена по комплекту оценочной
