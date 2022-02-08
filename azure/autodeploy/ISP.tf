@@ -25,7 +25,7 @@ resource "azurerm_linux_virtual_machine" "ISP" {
   name                            = "ISP"
   resource_group_name             = data.azurerm_resource_group.RGKP11.name
   location                        = data.azurerm_resource_group.RGKP11.location
-  size                            = var.sizeVM
+  size                            = var.sizesmallVM
   disable_password_authentication = "false"
   admin_username                  = var.adminusername
   admin_password                  = var.adminpassword
