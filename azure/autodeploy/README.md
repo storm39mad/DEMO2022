@@ -30,18 +30,22 @@ cd C:\
 
 git clone https://github.com/storm39mad/DEMO2022.git
 ```
-Открываем директорию autodeploy в vs code
+
 ![image](https://user-images.githubusercontent.com/79700810/152991858-3085cbdb-0730-41e4-b969-1b617aa0b68c.png)
 
-Запускаем терминал Terminal -> New Terminal
+Открываем директорию autodeploy в vs code
+
 ![image](https://user-images.githubusercontent.com/79700810/152991910-80f1dccd-6779-443f-a4a9-f8a2d863c80d.png)
 
-Устанавливаем плагины
+Запускаем терминал Terminal -> New Terminal
+
 ![image](https://user-images.githubusercontent.com/79700810/152991976-4cd3dbfb-e4aa-4b9f-bce1-15ad3ae4e860.png)
 
-В файле main.tf объявлены все основные переменные и обращение к ресурстной группе в azure
+Устанавливаем плагины
+
 ![image](https://user-images.githubusercontent.com/79700810/152992386-0c5ed540-a54b-47e1-85cf-fb4f67e3fd10.png)
 
+В файле main.tf объявлены все основные переменные и обращение к ресурстной группе в azure
 
 ![image](https://user-images.githubusercontent.com/79700810/152992126-e609b36b-7f75-4260-b413-da271a6620d3.png)
 
