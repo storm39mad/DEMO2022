@@ -60,11 +60,12 @@ terraform init
 ```powershell
 terraform apply
 ```
-![image](https://user-images.githubusercontent.com/79700810/153000909-fcde95bd-2ad5-4ecb-9b81-19071c35b4a4.png)
-
 ```powershell
 yes
 ```
+![image](https://user-images.githubusercontent.com/79700810/153000909-fcde95bd-2ad5-4ecb-9b81-19071c35b4a4.png)
+
+
 
 ![image](https://user-images.githubusercontent.com/79700810/153001108-d7cd7070-025f-4351-8c67-57399546e041.png)
 
@@ -76,6 +77,9 @@ yes
 
 ```powershell
 terraform destroy
+```
+```powershell
+yes
 ```
 
 ![image](https://user-images.githubusercontent.com/79700810/153005950-7bb7ed75-07df-432b-9066-fca4ea2ffd43.png)
