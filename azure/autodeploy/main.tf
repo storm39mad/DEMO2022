@@ -23,6 +23,11 @@ variable "sizeVM" {
   default = "Standard_B2s"
 }
 
+variable "sizesmallVM" {
+  type = string
+  default = "Standard_B1s"
+}
+
 variable "adminusername" {
   type = string
   default = "vmadmin"
