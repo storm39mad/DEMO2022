@@ -1,6 +1,6 @@
 resource "azurerm_route_table" "RT-Right" {
   name                          = "RT-Right"
-  location                      = "West Europe"
+  location                      = data.azurerm_resource_group.RGKP11.location
   resource_group_name           = data.azurerm_resource_group.RGKP11.name
   disable_bgp_route_propagation = true
 

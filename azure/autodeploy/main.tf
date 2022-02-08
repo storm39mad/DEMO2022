@@ -17,3 +17,18 @@ provider "azurerm" {
 data "azurerm_resource_group" "RGKP11" {
   name = "Azure-competition-KP11_prof"
 }
+
+variable "sizeVM" {
+  type = string
+  default = "Standard_B2s"
+}
+
+variable "adminusername" {
+  type = string
+  default = "vmadmin"
+}
+
+variable "adminpassword" {
+  type = string
+  default = "Pa$$w0rdPa$$w0rd"
+}

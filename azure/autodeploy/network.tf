@@ -4,7 +4,7 @@
 resource "azurerm_virtual_network" "vNET-LEFT" {
   name                = "vNET-LEFT"
   resource_group_name = data.azurerm_resource_group.RGKP11.name
-  location            = "West Europe"
+  location            = data.azurerm_resource_group.RGKP11.location
   address_space       = ["10.0.0.0/16"]
 }
 # Create a virtual subnet 1
@@ -26,7 +26,7 @@ resource "azurerm_subnet" "vNET-Subnet-Private-Left" {
 resource "azurerm_virtual_network" "vNET-RIGHT" {
   name                = "vNET-RIGHT"
   resource_group_name = data.azurerm_resource_group.RGKP11.name
-  location            = "West Europe"
+  location            = data.azurerm_resource_group.RGKP11.location
   address_space       = ["172.16.0.0/16"]
 }
 
@@ -50,7 +50,7 @@ resource "azurerm_subnet" "vNET-Subnet-Private-Right" {
 resource "azurerm_virtual_network" "vNET-INET" {
   name                = "vNET-INET"
   resource_group_name = data.azurerm_resource_group.RGKP11.name
-  location            = "West Europe"
+  location            = data.azurerm_resource_group.RGKP11.location
   address_space       = ["192.168.0.0/16"]
 }
 

@@ -2,13 +2,13 @@
 resource "azurerm_public_ip" "isp-public-ip" {
   name                = "isp-public-ip"
   resource_group_name = data.azurerm_resource_group.RGKP11.name
-  location            = "West Europe"
+  location            = data.azurerm_resource_group.RGKP11.location
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_network_interface" "int-ips-inet" {
   name                = "int-isp-inet"
-  location            = "West Europe"
+  location            = data.azurerm_resource_group.RGKP11.location
   resource_group_name = data.azurerm_resource_group.RGKP11.name
 
 
@@ -24,11 +24,11 @@ resource "azurerm_network_interface" "int-ips-inet" {
 resource "azurerm_linux_virtual_machine" "ISP" {
   name                            = "ISP"
   resource_group_name             = data.azurerm_resource_group.RGKP11.name
-  location                        = "West Europe"
-  size                            = "Standard_B2s"
+  location                        = data.azurerm_resource_group.RGKP11.location
+  size                            = var.sizeVM
   disable_password_authentication = "false"
-  admin_username                  = "ISPAdmin"
-  admin_password                  = "Pa$$w0rdPa$$w0rd"
+  admin_username                  = var.adminusername
+  admin_password                  = var.adminpassword
 
   network_interface_ids = [
     azurerm_network_interface.int-ips-inet.id,

@@ -2,7 +2,7 @@
 
 resource "azurerm_network_interface" "int-srv-private" {
   name                = "int-srv-private"
-  location            = "West Europe"
+  location            = data.azurerm_resource_group.RGKP11.location
   resource_group_name = data.azurerm_resource_group.RGKP11.name
 
 
@@ -16,7 +16,7 @@ resource "azurerm_network_interface" "int-srv-private" {
 
 resource "azurerm_managed_disk" "srv-disk-1" {
   name                 = "srv-disk-1"
-  location             = "West Europe"
+  location             = data.azurerm_resource_group.RGKP11.location
   resource_group_name  = data.azurerm_resource_group.RGKP11.name
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
@@ -25,7 +25,7 @@ resource "azurerm_managed_disk" "srv-disk-1" {
 
 resource "azurerm_managed_disk" "srv-disk-2" {
   name                 = "srv-disk-2"
-  location             = "West Europe"
+  location             = data.azurerm_resource_group.RGKP11.location
   resource_group_name  = data.azurerm_resource_group.RGKP11.name
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
@@ -35,10 +35,10 @@ resource "azurerm_managed_disk" "srv-disk-2" {
 resource "azurerm_windows_virtual_machine" "SRV" {
   name                = "SRV"
   resource_group_name = data.azurerm_resource_group.RGKP11.name
-  location            = "West Europe"
-  size                = "Standard_B2s"
-  admin_username      = "SRVAdmin"
-  admin_password      = "Pa$$w0rdPa$$w0rd"
+  location            = data.azurerm_resource_group.RGKP11.location
+  size                = var.sizeVM
+  admin_username      = var.adminusername
+  admin_password      = var.adminpassword
 
   network_interface_ids = [
     azurerm_network_interface.int-srv-private.id,

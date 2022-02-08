@@ -4,7 +4,7 @@
 ###
 resource "azurerm_network_interface" "int-webl-private" {
   name                = "int-webl-private"
-  location            = "West Europe"
+  location            = data.azurerm_resource_group.RGKP11.location
   resource_group_name = data.azurerm_resource_group.RGKP11.name
 
 
@@ -19,11 +19,11 @@ resource "azurerm_network_interface" "int-webl-private" {
 resource "azurerm_linux_virtual_machine" "WEB-L" {
   name                            = "WEB-L"
   resource_group_name             = data.azurerm_resource_group.RGKP11.name
-  location                        = "West Europe"
-  size                            = "Standard_B2s"
+  location                        = data.azurerm_resource_group.RGKP11.location
+  size                            = var.sizeVM
   disable_password_authentication = "false"
-  admin_username                  = "WEBLAdmin"
-  admin_password                  = "Pa$$w0rdPa$$w0rd"
+  admin_username                  = var.adminusername
+  admin_password                  = var.adminpassword
 
   network_interface_ids = [
     azurerm_network_interface.int-webl-private.id,
