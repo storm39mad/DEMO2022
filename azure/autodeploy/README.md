@@ -43,5 +43,17 @@ git clone https://github.com/storm39mad/DEMO2022.git
 terraform init
 ```
 
+
+
 ![image](https://user-images.githubusercontent.com/79700810/152992752-9c43289e-2d23-47c7-9de8-9b60004df629.png)
+
+
+
+![image](https://user-images.githubusercontent.com/79700810/152995696-d8a4c051-bc3d-4616-8a61-f70890cc286d.png)
+
+![image](https://user-images.githubusercontent.com/79700810/152995939-6f3363d3-ba6f-47ae-81f2-94333213c083.png)
+
+![image](https://user-images.githubusercontent.com/79700810/152996116-b00bab67-d548-4c77-9b26-3fea462495a1.png)
+
+![image](https://user-images.githubusercontent.com/79700810/152996429-086839d5-c03a-43c2-84b0-787409f23ede.png)
 
