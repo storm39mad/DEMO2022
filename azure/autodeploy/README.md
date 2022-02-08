@@ -99,6 +99,11 @@ yes
 
 
 после чего в группе ресурсов будат созданны все необхожимые и описанные элементы инфраструктуры
+Output покажет публичные ip адреса для подключения по ssh
+
+![image](https://user-images.githubusercontent.com/79700810/153014004-074695b4-7204-458d-bebb-d5c502f8a5c1.png)
+
+
 ![image](https://user-images.githubusercontent.com/79700810/153005787-87d7d071-b78d-42fe-889e-ac1a1a6ae4e4.png)
 
 
