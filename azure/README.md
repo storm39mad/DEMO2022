@@ -396,12 +396,395 @@ iptables -A INPUT -i eth0 -j REJECT
 
 |Zone            |Type                |Key             |Meaning         |
 |  ------------- | -------------      | -------------  |  ------------- |
-| demo.wsr       | A                  | isp            | "<public-ip-ISP>"        |
-|                | A                  | www            |<public-ip-RTR-L>      |
-|                | A                  | www            | <public-ip-RTR-R>     |
+| demo.wsr       | A                  | isp            | public-ip-ISP        |
+|                | A                  | www            |public-ip-RTR-L      |
+|                | A                  | www            | public-ip-RTR-R     |
 |                | CNAME              | internet       | isp            |
 |                | NS                 | int            | rtr-l.demo.wsr      |
-|                | A                  | rtr-l       | <public-ip-RTR-L>     |
+|                | A                  | rtr-l       | public-ip-RTR-L     |
    
 
 ### 1. Выполните настройку первого уровня DNS-системы стенда:
+
+#### ISP
+
+```debian
+sudo -i
+```
+```debian
+apt install -y bind9
+```
+
+```debian
+mkdir /opt/dns
+cp /etc/bind/db.local /opt/dns/demo.db
+chown -R bind:bind /opt/dns
+```
+
+```debian
+nano /etc/apparmor.d/usr.sbin.named
+```
+```debian
+/opt/dns/** rw,
+```
+```debian
+systemctl restart apparmor.service
+```
+```debian
+nano /etc/bind/named.conf.options
+```
+```debian
+allow-query {any; };
+```
+```debian
+nano /etc/bind/named.conf.default-zones
+```
+```debian
+zone "demo.wsr" {
+   type master;
+   allow-transfer { any; };
+   file "/opt/dns/demo.db";
+};
+```
+
+```debian
+@ IN SOA demo.wsr. root.demo.wsr.(
+```
+```debian
+@ IN NS isp.demo.wsr.
+isp IN A <public-ip-ISP>
+www IN A <public-ip-RTR-L>
+www IN A <public-ip-RTR-R>
+internet CNAME isp.demo.wsr.
+int IN NS rtr-l.demo.wsr
+rtr-l IN  A <public-ip-RTR-L>
+```
+
+```debian
+systemctl restart bind9
+```
+
+### 2. Выполните настройку второго уровня DNS-системы стенда;
+
+```powershell
+Install-WindowsFeature -Name DNS -IncludeManagementTools
+```
+
+```powershell
+Add-DnsServerPrimaryZone -Name "int.demo.wsr" -ZoneFile "int.demo.wsr.dns"
+```
+
+```powershell
+Add-DnsServerPrimaryZone -NetworkId 10.0.2.0/24 -ZoneFile "int.demo.wsr.dns"
+```
+
+```powershell
+Add-DnsServerPrimaryZone -NetworkId 172.16.2.0/24 -ZoneFile "int.demo.wsr.dns"
+```
+
+```powershell
+Add-DnsServerResourceRecordA -Name "web-l" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "10.0.2.6" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "web-r" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.2.6" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "srv" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "10.0.2.7" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "rtr-l" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "10.0.2.5" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "rtr-r" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.2.5" -CreatePtr 
+```
+
+```powershell
+Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-l.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-r.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "ntp" -HostNameAlias "srv.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "dns" -HostNameAlias "srv.int.demo.wsr" -ZoneName "int.demo.wsr"
+```
+
+### 3. Выполните настройку первого уровня системы синхронизации времени:
+#### ISP
+```debian
+apt install -y chrony 
+```
+```debian
+nano /etc/chrony/chrony.conf
+```
+```debian
+local stratum 4
+```
+
+```debian
+systemctl restart chronyd 
+```
+
+### 4. Выполните конфигурацию службы второго уровня времени на SRV
+
+```powershell
+New-NetFirewallRule -DisplayName "NTP" -Direction Inbound -LocalPort 123 -Protocol UDP -Action Allow
+```
+
+```powershell
+w32tm /query /status
+Start-Service W32Time
+w32tm /config /manualpeerlist:<public-ip-ISP> /syncfromflags:manual /reliable:yes /update
+Restart-Service W32Time
+```
+
+#### CLI NTP
+
+```powershell
+New-NetFirewallRule -DisplayName "NTP" -Direction Inbound -LocalPort 123 -Protocol UDP -Action Allow
+```
+
+```powershell
+Start-Service W32Time
+w32tm /config /manualpeerlist:<public-ip-ISP> /syncfromflags:manual /reliable:yes /update
+Restart-Service W32Time
+```
+
+```powershell
+Set-Service -Name W32Time -StartupType Automatic
+```
+
+#### RTR-L
+```debian
+apt install -y chrony 
+```
+```debian
+nano /etc/chrony/chrony.conf
+```
+```debian
+pool <public-ip-ISP> iburst
+```
+```debian
+systemctl start chronyd
+systemctl enable chronyd
+chronyc sources
+```
+#### RTR-R
+```debian
+apt install -y chrony 
+```
+```debian
+nano /etc/chrony/chrony.conf
+```
+```debian
+pool <public-ip-ISP> iburst
+```
+```debian
+systemctl start chronyd
+systemctl enable chronyd
+chronyc sources
+```
+
+#### WEB-L
+```debian
+apt install -y chrony 
+```
+```debian
+nano /etc/chrony/chrony.conf
+```
+```debian
+pool <public-ip-ISP> iburst
+```
+```debian
+systemctl start chronyd
+systemctl enable chronyd
+chronyc sources
+```
+
+#### WEB-R
+```debian
+apt install -y chrony 
+```
+```debian
+nano /etc/chrony/chrony.conf
+```
+```debian
+pool <public-ip-ISP> iburst
+```
+```debian
+systemctl start chronyd
+systemctl enable chronyd
+chronyc sources
+```
+### 5. Реализуйте файловый SMB-сервер на базе SRV
+
+```powershell
+Get-PhysicalDisk
+```
+
+```powershell
+New-StoragePool -FriendlyName "POOLRAID1" -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks (Get-PhysicalDisk -CanPool $true)
+```
+```powershell
+New-VirtualDisk -StoragePoolFriendlyName "POOLRAID1" -FriendlyName "RAID1" -ResiliencySettingName Mirror -UseMaximumSize
+```
+```powershell
+Initialize-Disk -FriendlyName "RAID1"
+```
+```powershell
+get-disk
+```
+
+```powershell
+New-Partition -DiskNumber 4 -UseMaximumSize -DriveLetter R
+```
+```powershell
+Format-Volume -DriveLetter R
+```
+
+#### SRV SMB
+
+```powershell
+Install-WindowsFeature -Name FS-FileServer -IncludeManagementTools
+```
+
+```powershell
+New-Item -Path R:\storage -ItemType Directory
+```
+```powershell
+New-SmbShare -Name "SMB" -Path "R:\storage" -FullAccess "Everyone"
+```
+### 6. Сервера WEB-L и WEB-R должны использовать службу, настроенную на SRV, для обмена файлами между собой:
+
+#### WEB-L
+
+```debian
+sudo -i
+apt install -y cifs-utils
+```
+```debian
+nano /root/.smbclient
+```
+```debian
+username=SRVAdmin
+password=Pa$$w0rdPa$$w0rd
+```
+```debian
+nano /etc/fstab
+```
+```debian
+//10.0.2.7/smb /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
+```
+```debian
+mkdir /opt/share
+mount -a
+```
+
+#### WEB-R
+```debian
+sudo -i
+apt install -y cifs-utils
+```
+```debian
+nano /root/.smbclient
+```
+```debian
+username=SRVAdmin
+password=Pa$$w0rdPa$$w0rd
+```
+```debian
+nano /etc/fstab
+```
+```debian
+//10.0.2.7/smb /opt/share cifs user,rw,_netdev,credentials=/root/.smbclient 0 0
+```
+```debian
+mkdir /opt/share
+mount -a
+```
+
+### 7. Выполните настройку центра сертификации на базе SRV:
+
+```powershell
+Install-WindowsFeature -Name AD-Certificate, ADCS-Web-Enrollment -IncludeManagementTools
+```
+
+```powershell
+Install-AdcsCertificationAuthority -CAType StandaloneRootCa -CACommonName "Demo.wsr" -force
+```
+
+```powershell
+Install-AdcsWebEnrollment -Confirm -force
+```
+
+```powershell
+New-SelfSignedCertificate -subject "localhost" 
+```
+
+```powershell
+Get-ChildItem cert:\LocalMachine\My
+```
+
+```powershell
+Move-item Cert:\LocalMachine\My\XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95 -destination Cert:\LocalMachine\Webhosting\
+```
+```powershell
+New-IISSiteBinding -Name 'Default Web Site' -BindingInformation "*:443:" -Protocol https -CertificateThumbPrint XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95 
+```
+
+```powershell
+Start-WebSite -Name "Default Web Site"
+```
+
+```powershell
+Get-CACrlDistributionPoint | Remove-CACrlDistributionPoint -force
+```
+
+```powershell
+Get-CAAuthorityInformationAccess |Remove-CAAuthorityInformationAccess -force
+```
+
+```powershell
+Get-CAAuthorityInformationAccess |Remove-CAAuthorityInformationAccess -force
+```
+
+```powershell
+Restart-Service CertSrc
+```
+
+## Инфраструктура веб-приложения.
+Данный блок подразумевает установку и настройку доступа к веб-приложению, выполненному в формате контейнера Docker
+1. Образ Docker (содержащий веб-приложение) расположен на ISO-образе дополнительных материалов;
+   - Выполните установку приложения AppDocker0;
+2. Пакеты для установки Docker расположены на дополнительном ISO-образе;
+3. Инструкция по работе с приложением расположена на дополнительном ISO-образе;
+4. Необходимо реализовать следующую инфраструктуру приложения.
+   - Клиентом приложения является CLI (браузер Edge);
+   - Хостинг приложения осуществляется на ВМ WEB-L и WEB-R;
+   - Доступ к приложению осуществляется по DNS-имени www.demo.wsr;
+     - Имя должно разрешаться во “внешние” адреса ВМ управления трафиком в обоих регионах;
+     - При необходимости, для доступа к к приложению допускается реализовать реверс-прокси или трансляцию портов;
+   - Доступ к приложению должен быть защищен с применением технологии TLS;
+     - Необходимо обеспечить корректное доверие сертификату сайта, без применения “исключений” и подобных механизмов;
+   - Незащищенное соединение должно переводится на защищенный канал автоматически;
+5. Необходимо обеспечить отказоустойчивость приложения;
+   - Сайт должен продолжать обслуживание (с задержкой не более 25 секунд) в следующих сценариях:
+     - Отказ одной из ВМ Web
+     - Отказ одной из ВМ управления трафиком. 
+
+#### WEB-L Doc
+
+### 1. Образ Docker (содержащий веб-приложение) расположен на ISO-образе дополнительных материалов;
+
+### 2. Пакеты для установки Docker расположены на дополнительном ISO-образе;
+```debian
+apt-get update
+```
+```debian
+apt-get -y install ca-certificates curl gnupg lsb-release
+```
+```debian
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+```
+```debian
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+```debian
+apt-get update
+```
+
+```debian
+apt-get install -y docker-ce docker-ce-cli containerd.io
+```
+
+
+
