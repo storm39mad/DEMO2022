@@ -45,7 +45,7 @@ git clone https://github.com/storm39mad/DEMO2022.git
 
 ![image](https://user-images.githubusercontent.com/79700810/152992386-0c5ed540-a54b-47e1-85cf-fb4f67e3fd10.png)
 
-В файле main.tf объявлены все основные переменные и обращение к ресурстной группе в azure, а также логины и пароли
+В файле main.tf объявлены все основные переменные и обращение к ресурстной группе в azure, а также логины и пароли от ВМ
 
 ![image](https://user-images.githubusercontent.com/79700810/152992126-e609b36b-7f75-4260-b413-da271a6620d3.png)
 
