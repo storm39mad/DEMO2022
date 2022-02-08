@@ -929,7 +929,7 @@ Get-ChildItem cert:\LocalMachine\My
 Move-item Cert:\LocalMachine\My\XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95 -destination Cert:\LocalMachine\Webhosting\
 ```
 ```powershell
-New-IISSiteBinding -Name 'Default Web Site' -BindingInformation "*:443:" -Protocol htts -CertificateThumbPrint XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95 
+New-IISSiteBinding -Name 'Default Web Site' -BindingInformation "*:443:" -Protocol https -CertificateThumbPrint XFX2DX02779XFD1F6F4X8435A5X26ED2X8DEFX95 
 ```
 
 ```powershell
@@ -949,7 +949,7 @@ Get-CAAuthorityInformationAccess |Remove-CAAuthorityInformationAccess -force
 ```
 
 ```powershell
-Restart-Service CertSrv
+Restart-Service CertSrc
 ```
 ![image](https://user-images.githubusercontent.com/79700810/149936233-d2a22bf8-037c-4a82-a1f9-a72b24c3843f.png)
 
@@ -1141,7 +1141,7 @@ upstream backend {
  
 server { 
     listen 443 ssl default_server; 
-    include snippers/snakeoil.config;
+    include snippers/snakeoil.conf;
 
     server_name www.demo.wsr; 
 
@@ -1201,7 +1201,7 @@ upstream backend {
  
 server { 
     listen 443 ssl default_server; 
-    include snippers/snakeoil.config;
+    include snippers/snakeoil.conf;
 
     server_name www.demo.wsr; 
 
