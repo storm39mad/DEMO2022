@@ -117,3 +117,29 @@ yes
 
 ![image](https://user-images.githubusercontent.com/79700810/153005950-7bb7ed75-07df-432b-9066-fca4ea2ffd43.png)
 
+## Подключение
+
+### ISP
+
+![image](https://user-images.githubusercontent.com/79700810/153823342-c31506e0-182b-4f5b-8fd5-43a46a39336f.png)
+
+### RTRL
+
+![image](https://user-images.githubusercontent.com/79700810/153823662-9d81c72b-bcc6-46c9-ac86-d30f97bd15a8.png)
+
+### WEBL
+![image](https://user-images.githubusercontent.com/79700810/153823734-f1a0ce1b-7cb5-4434-a676-0ce148fde870.png)
+
+### SRV
+
+![image](https://user-images.githubusercontent.com/79700810/153823971-e870c70a-94b4-4794-a1fb-8d56d52408a7.png)
+
+
+![image](https://user-images.githubusercontent.com/79700810/153824008-e5302118-6c9d-4d6f-b9ca-8d82d129e45f.png)
+
+### RTRR
+![image](https://user-images.githubusercontent.com/79700810/153824109-a2c8f8ad-c116-49ba-836d-07e2f7e20888.png)
+
+### WEBR
+
+![image](https://user-images.githubusercontent.com/79700810/153824189-5d60b353-c02b-4b56-a22b-f200a79c84c3.png)
