@@ -662,8 +662,8 @@ Add-DnsServerPrimaryZone -NetworkId 172.16.100.0/24 -ZoneFile "int.demo.wsr.dns"
 |                | A                  | srv           | 192.168.100.200      |
 |                | A                  | rtr-l            | 192.168.100.254      |
 |                | A                  | rtr-r           | 172.16.100.254 |
-|                | CNAME              | webapp        | web-l            |
-|                | CNAME              | webapp       | web-r            |
+|                | CNAME              | webapp1        | web-l            |
+|                | CNAME              | webapp2       | web-r            |
 |                | CNAME              | ntp       | srv            |
 |                | CNAME              | dns       | srv           |
 
@@ -678,8 +678,8 @@ Add-DnsServerResourceRecordA -Name "rtr-r" -ZoneName "int.demo.wsr" -AllowUpdate
 ```
 
 ```powershell
-Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-l.int.demo.wsr" -ZoneName "int.demo.wsr"
-Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-r.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "webapp1" -HostNameAlias "web-l.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "webapp2" -HostNameAlias "web-r.int.demo.wsr" -ZoneName "int.demo.wsr"
 Add-DnsServerResourceRecordCName -Name "ntp" -HostNameAlias "srv.int.demo.wsr" -ZoneName "int.demo.wsr"
 Add-DnsServerResourceRecordCName -Name "dns" -HostNameAlias "srv.int.demo.wsr" -ZoneName "int.demo.wsr"
 ```
