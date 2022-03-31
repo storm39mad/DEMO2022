@@ -1,5 +1,5 @@
 # DEMO2022
-# [Задание](https://cdn.dp.worldskills.ru/esatk-prod/public_files/f4a4628a-f812-485f-8f97-73ad3a59015d-13059eac203251b7f8b1388987ecf341.pdf)
+# [Задание](https://cdn.dp.worldskills.ru/esatk-prod/public_files/3452e3a5-d95b-4a3b-9a12-35e4bf991280-62d2325bc9e62929ba7e192fed6d6036.pdf)
 
 # Образец задания
 Образец задания для демонстрационного экзамена по комплекту оценочной
